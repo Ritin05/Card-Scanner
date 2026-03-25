@@ -636,6 +636,92 @@
         .empty .esub{font-size:10px;margin-top:4px;opacity:0.7}
         .hint{text-align:center;font-size:10px;color:#94a3b8;margin-top:8px;letter-spacing:0.3px}
 
+        /* ===== CARD THUMBNAIL ===== */
+        .lcard-row{display:flex;gap:12px;align-items:flex-start}
+        .lcard-thumb{
+            width:56px;height:56px;border-radius:10px;overflow:hidden;
+            border:1px solid #e2e8f0;flex-shrink:0;background:#f1f5f9;
+        }
+        .lcard-thumb img{width:100%;height:100%;object-fit:cover}
+        .lcard-info{flex:1;min-width:0}
+
+        /* ===== PROFILE PAGE ===== */
+        .profile-header{
+            text-align:center;padding:30px 20px 20px;
+            background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);
+            border-radius:0 0 24px 24px;margin:-16px -16px 20px;
+        }
+        .profile-avatar{
+            width:72px;height:72px;border-radius:50%;
+            background:#ffffff;margin:0 auto 12px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:28px;font-weight:900;color:#2563eb;
+            box-shadow:0 4px 16px rgba(0,0,0,0.15);
+            border:3px solid rgba(255,255,255,0.3);
+        }
+        .profile-name{font-size:20px;font-weight:800;color:#ffffff}
+        .profile-role{font-size:11px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+        .profile-email{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px}
+        .profile-stats{
+            display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;
+            background:#e2e8f0;border-radius:12px;overflow:hidden;
+            margin-top:20px;
+        }
+        .ps-item{
+            background:#ffffff;padding:16px 8px;text-align:center;
+        }
+        .ps-num{font-size:24px;font-weight:900;color:#2563eb}
+        .ps-label{font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px}
+        .profile-section{margin-bottom:16px}
+        .profile-section-title{
+            font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;
+            letter-spacing:1.2px;margin-bottom:10px;padding:0 2px;
+        }
+        .profile-item{
+            display:flex;align-items:center;gap:12px;
+            padding:14px 16px;background:#ffffff;border:1px solid #e2e8f0;
+            border-radius:12px;margin-bottom:8px;
+        }
+        .profile-item-ico{
+            width:36px;height:36px;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:16px;flex-shrink:0;
+        }
+        .profile-item-info{flex:1}
+        .profile-item-title{font-size:13px;font-weight:600;color:#1e293b}
+        .profile-item-sub{font-size:11px;color:#94a3b8;margin-top:1px}
+        .profile-item-val{font-size:13px;font-weight:700;color:#1e293b}
+
+        /* ===== FOLLOW-UP ===== */
+        .followup-bar{
+            display:flex;align-items:center;gap:8px;
+            padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;
+            border-radius:10px;margin-bottom:12px;cursor:pointer;
+            transition:all 0.2s;
+        }
+        .followup-bar:active{background:#fef3c7}
+        .followup-bar-ico{font-size:16px}
+        .followup-bar-info{flex:1}
+        .followup-bar-title{font-size:12px;font-weight:700;color:#b45309}
+        .followup-bar-sub{font-size:10px;color:#d97706;margin-top:1px}
+        .followup-bar-count{
+            font-size:16px;font-weight:900;color:#f59e0b;
+            background:#ffffff;padding:4px 10px;border-radius:8px;
+            border:1px solid #fde68a;
+        }
+        .fu-modal-row{
+            display:flex;align-items:center;gap:10px;
+            padding:12px;background:#f8fafc;border:1px solid #e2e8f0;
+            border-radius:10px;margin-bottom:8px;cursor:pointer;
+        }
+        .fu-modal-row:active{background:#f1f5f9}
+        .fu-date{font-size:10px;font-weight:700;color:#2563eb;white-space:nowrap}
+        .fu-company{font-size:13px;font-weight:600;color:#1e293b;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .fu-badge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:6px}
+        .fu-badge.overdue{background:#fef2f2;color:#ef4444}
+        .fu-badge.today{background:#f0fdf4;color:#10b981}
+        .fu-badge.upcoming{background:#eff6ff;color:#3b82f6}
+
         ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:4px}
     </style>
 </head>
@@ -902,6 +988,14 @@
 <!-- ========== CARDS PAGE ========== -->
 <div class="page" id="pgCards">
 <div class="container">
+    <div class="followup-bar" id="fuBar" style="display:none" onclick="goPage('pgProfile',document.querySelectorAll('.bn')[4])">
+        <span class="followup-bar-ico">&#128276;</span>
+        <div class="followup-bar-info">
+            <div class="followup-bar-title">Follow-up Reminders</div>
+            <div class="followup-bar-sub" id="fuBarSub">You have pending follow-ups</div>
+        </div>
+        <span class="followup-bar-count" id="fuBarCount">0</span>
+    </div>
     <div class="toolbar">
         <div class="search-w">
             <span class="s-ico">&#128269;</span>
@@ -947,6 +1041,78 @@
 </div>
 </div>
 
+<!-- ========== PROFILE PAGE ========== -->
+<div class="page" id="pgProfile">
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-avatar" id="profAvatar">SS</div>
+        <div class="profile-name" id="profName">Sales Person</div>
+        <div class="profile-role" id="profRole">Sales</div>
+        <div class="profile-email" id="profEmail">email@company.com</div>
+    </div>
+
+    <div class="profile-stats">
+        <div class="ps-item"><div class="ps-num" id="profTotal">0</div><div class="ps-label">Total Scans</div></div>
+        <div class="ps-item"><div class="ps-num" id="profToday">0</div><div class="ps-label">Today</div></div>
+        <div class="ps-item"><div class="ps-num" id="profHot">0</div><div class="ps-label">Hot Leads</div></div>
+    </div>
+
+    <!-- Follow-up Reminders Section -->
+    <div class="profile-section" style="margin-top:20px">
+        <div class="profile-section-title">Follow-up Reminders</div>
+        <div id="followupList">
+            <div class="profile-item" style="justify-content:center;color:#94a3b8;font-size:12px">No follow-ups yet</div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <div class="profile-section-title">My Performance</div>
+        <div class="profile-item">
+            <div class="profile-item-ico" style="background:#f0fdf4">&#128293;</div>
+            <div class="profile-item-info">
+                <div class="profile-item-title">Hot Leads</div>
+                <div class="profile-item-sub">Score 60+</div>
+            </div>
+            <div class="profile-item-val" id="profHotC">0</div>
+        </div>
+        <div class="profile-item">
+            <div class="profile-item-ico" style="background:#fff7ed">&#127777;</div>
+            <div class="profile-item-info">
+                <div class="profile-item-title">Warm Leads</div>
+                <div class="profile-item-sub">Score 35-59</div>
+            </div>
+            <div class="profile-item-val" id="profWarmC">0</div>
+        </div>
+        <div class="profile-item">
+            <div class="profile-item-ico" style="background:#eff6ff">&#10052;</div>
+            <div class="profile-item-info">
+                <div class="profile-item-title">Cold Leads</div>
+                <div class="profile-item-sub">Score below 35</div>
+            </div>
+            <div class="profile-item-val" id="profColdC">0</div>
+        </div>
+        <div class="profile-item">
+            <div class="profile-item-ico" style="background:#f0fdf4">&#9989;</div>
+            <div class="profile-item-info">
+                <div class="profile-item-title">Synced Cards</div>
+                <div class="profile-item-sub">Successfully uploaded</div>
+            </div>
+            <div class="profile-item-val" id="profSynced">0</div>
+        </div>
+        <div class="profile-item">
+            <div class="profile-item-ico" style="background:#fffbeb">&#9203;</div>
+            <div class="profile-item-info">
+                <div class="profile-item-title">Pending Sync</div>
+                <div class="profile-item-sub">Waiting to upload</div>
+            </div>
+            <div class="profile-item-val" id="profPending">0</div>
+        </div>
+    </div>
+
+    <button class="btn btn-danger" onclick="doLogout()" style="margin-top:8px">&#128682; Logout</button>
+</div>
+</div>
+
 <!-- DETAIL MODAL -->
 <div class="modal-bg" id="modal">
     <div class="modal-box">
@@ -956,6 +1122,7 @@
             <button class="btn btn-neu btn-sm modal-export-btn" onclick="dlSingleCSV()">&#128229; Excel</button>
             <button class="btn btn-neu btn-sm" onclick="dlSingleVCF()">&#128100; vCard</button>
             <button class="btn btn-neu btn-sm" onclick="shareCard()">&#128228; Share</button>
+            <button class="btn btn-neu btn-sm" onclick="setFollowUp()" style="color:#f59e0b">&#128276; Follow-up</button>
             <button class="btn btn-neu btn-sm" onclick="closeModal()">Close</button>
         </div>
     </div>
@@ -983,10 +1150,11 @@
 
 <!-- BOTTOM NAV -->
 <div class="bnav">
-    <div class="bn active" onclick="goPage('pgScan',this)"><div class="bn-i">&#128247;</div><span data-en="Scan" data-hi="&#2360;&#2381;&#2325;&#2376;&#2344;">Scan</span></div>
-    <div class="bn" onclick="goPage('pgQueue',this)"><div class="bn-i">&#128230;</div><span data-en="Queue" data-hi="&#2325;&#2381;&#2351;&#2370;">Queue</span><span class="bn-bdg" id="qBadge" style="display:none">0</span></div>
-    <div class="bn" onclick="goPage('pgCards',this)"><div class="bn-i">&#127869;</div><span data-en="Cards" data-hi="&#2325;&#2366;&#2352;&#2381;&#2337;">Cards</span></div>
-    <div class="bn" onclick="goPage('pgAna',this)"><div class="bn-i">&#128200;</div><span data-en="Analytics" data-hi="&#2319;&#2344;&#2366;&#2354;&#2367;&#2335;&#2367;&#2325;&#2381;&#2360;">Analytics</span></div>
+    <div class="bn active" onclick="goPage('pgScan',this)"><div class="bn-i">&#128247;</div><span>Scan</span></div>
+    <div class="bn" onclick="goPage('pgQueue',this)"><div class="bn-i">&#128230;</div><span>Queue</span><span class="bn-bdg" id="qBadge" style="display:none">0</span></div>
+    <div class="bn" onclick="goPage('pgCards',this)"><div class="bn-i">&#128203;</div><span>Cards</span></div>
+    <div class="bn" onclick="goPage('pgAna',this)"><div class="bn-i">&#128200;</div><span>Stats</span></div>
+    <div class="bn" onclick="goPage('pgProfile',this)"><div class="bn-i">&#128100;</div><span>Profile</span><span class="bn-bdg" id="fuBadge" style="display:none">0</span></div>
 </div>
 
 <script>
@@ -1351,15 +1519,24 @@ async function renderCards(){
     document.getElementById('rCount').innerHTML=`<span>${f.length} card${f.length!==1?'s':''}</span><span>${all.length} total</span>`;
     const el=document.getElementById('cList');
     if(!f.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#128203;</div><p>No cards found</p></div>';return}
+    // Update follow-up bar
+    updateFollowUpBar(all);
     el.innerHTML=f.map(c=>{
         const t=new Date(c.timestamp).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
         const co=c.company_name||'Unknown';const nm=c.full_name||'';const rk=(c.remark||'').toLowerCase();
         const phone=c.mobile_number||c.phone_number||'';const sl=c._scoreLabel||scoreLabel(calcScore(c));
+        const thumb=c.frontImages&&c.frontImages.length?c.frontImages[0]:'';
+        const fuIcon=c.followUpDate?'&#128276; ':'';
         return `<div class="lcard" onclick="openDetail(${c.id})">
             <div class="lcard-score ${sl}">${sl==='hot'?'&#128293; HOT':sl==='warm'?'&#127777; WARM':'&#10052; COLD'}</div>
-            <div class="lc-company">${esc(co)}</div>
-            ${nm?`<div class="lc-name">${esc(nm)}${c.job_title?' &middot; '+esc(c.job_title):''}</div>`:''}
-            ${phone?`<div class="lc-contact">&#128222; ${esc(phone)}</div>`:''}
+            <div class="lcard-row">
+                ${thumb?`<div class="lcard-thumb"><img src="${thumb}" alt="card" loading="lazy"></div>`:''}
+                <div class="lcard-info">
+                    <div class="lc-company">${fuIcon}${esc(co)}</div>
+                    ${nm?`<div class="lc-name">${esc(nm)}${c.job_title?' &middot; '+esc(c.job_title):''}</div>`:''}
+                    ${phone?`<div class="lc-contact">&#128222; ${esc(phone)}</div>`:''}
+                </div>
+            </div>
             <div class="lc-bottom">
                 <div class="lc-tags">
                     <span class="tag ${rk}">${c.remark||'N/A'}</span>
@@ -1486,7 +1663,7 @@ async function batchDel(){for(const id of batchSel)try{await dbDel('cards',id)}c
 
 // ============ NAV & RENDER ============
 function goPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.bn').forEach(n=>n.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');
-    if(id==='pgQueue'){batchSel.clear();updateBatch();renderQueue()}if(id==='pgCards')renderCards();if(id==='pgAna')renderAnalytics();if(id==='pgScan')refreshStats()
+    if(id==='pgQueue'){batchSel.clear();updateBatch();renderQueue()}if(id==='pgCards')renderCards();if(id==='pgAna')renderAnalytics();if(id==='pgScan')refreshStats();if(id==='pgProfile')renderProfile()
 }
 async function renderQueue(){
     const pend=await dbIdx('cards','status','pending'),send=await dbIdx('cards','status','sending'),all=[...send,...pend];
@@ -1516,6 +1693,106 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 document.getElementById('exModal').addEventListener('click',e=>{if(e.target.id==='exModal')closeExport()});
 document.getElementById('fsImg').addEventListener('click',e=>{if(e.target.id==='fsImg')document.getElementById('fsImg').classList.remove('open')});
 
+// ============ PROFILE ============
+async function renderProfile(){
+    if(!currentUser)return;
+    // Set user info
+    const initials=(currentUser.name||'').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()||'SS';
+    document.getElementById('profAvatar').textContent=initials;
+    document.getElementById('profName').textContent=currentUser.name||'User';
+    document.getElementById('profRole').textContent=currentUser.role==='admin'?'Administrator':'Sales Executive';
+    document.getElementById('profEmail').textContent=currentUser.email||'';
+
+    // Get stats
+    const cards=await dbAll('extracted');
+    const pending=await dbIdx('cards','status','pending');
+    const myCards=cards.filter(c=>(c.salesPerson||'').toLowerCase()===(currentUser.name||'').toLowerCase());
+    const today=new Date().toDateString();
+    const todayCards=myCards.filter(c=>new Date(c.timestamp).toDateString()===today);
+    const hot=myCards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='hot');
+    const warm=myCards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='warm');
+    const cold=myCards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='cold');
+
+    document.getElementById('profTotal').textContent=currentUser.role==='admin'?cards.length:myCards.length;
+    document.getElementById('profToday').textContent=currentUser.role==='admin'?cards.filter(c=>new Date(c.timestamp).toDateString()===today).length:todayCards.length;
+    document.getElementById('profHot').textContent=currentUser.role==='admin'?cards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='hot').length:hot.length;
+    document.getElementById('profHotC').textContent=currentUser.role==='admin'?cards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='hot').length:hot.length;
+    document.getElementById('profWarmC').textContent=currentUser.role==='admin'?cards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='warm').length:warm.length;
+    document.getElementById('profColdC').textContent=currentUser.role==='admin'?cards.filter(c=>(c._scoreLabel||scoreLabel(calcScore(c)))==='cold').length:cold.length;
+    document.getElementById('profSynced').textContent=currentUser.role==='admin'?cards.length:(myCards.length);
+    document.getElementById('profPending').textContent=pending.length;
+
+    // Render follow-ups
+    renderFollowUps(currentUser.role==='admin'?cards:myCards);
+}
+
+// ============ FOLLOW-UP REMINDERS ============
+async function setFollowUp(){
+    if(!curModal)return;
+    const existingDate=curModal.followUpDate||'';
+    const dateStr=prompt('Set follow-up date (YYYY-MM-DD):',existingDate||new Date(Date.now()+86400000*2).toISOString().split('T')[0]);
+    if(!dateStr)return;
+    // Validate date
+    const d=new Date(dateStr);if(isNaN(d.getTime())){toast('Invalid date','&#9888;');return}
+    // Update in IndexedDB
+    curModal.followUpDate=dateStr;
+    const tx=db.transaction('extracted','readwrite');
+    tx.objectStore('extracted').put(curModal);
+    toast('Follow-up set for '+d.toLocaleDateString('en-IN'),'&#128276;');
+    updateFollowUpBadge();
+}
+
+async function updateFollowUpBadge(){
+    const cards=await dbAll('extracted');
+    const today=new Date();today.setHours(0,0,0,0);
+    const fus=cards.filter(c=>c.followUpDate);
+    const active=fus.filter(c=>{const d=new Date(c.followUpDate);d.setHours(0,0,0,0);return d<=new Date(today.getTime()+86400000*7)});
+    const badge=document.getElementById('fuBadge');
+    if(active.length>0){badge.textContent=active.length;badge.style.display=''}
+    else{badge.style.display='none'}
+}
+
+function updateFollowUpBar(cards){
+    const today=new Date();today.setHours(0,0,0,0);
+    const fus=cards.filter(c=>c.followUpDate).map(c=>{
+        const d=new Date(c.followUpDate);d.setHours(0,0,0,0);
+        const diff=Math.floor((d-today)/86400000);
+        return {...c,_fuDiff:diff};
+    }).filter(c=>c._fuDiff<=7).sort((a,b)=>a._fuDiff-b._fuDiff);
+    const bar=document.getElementById('fuBar');
+    const sub=document.getElementById('fuBarSub');
+    const count=document.getElementById('fuBarCount');
+    if(fus.length>0){
+        bar.style.display='';count.textContent=fus.length;
+        const overdue=fus.filter(c=>c._fuDiff<0).length;
+        const todayC=fus.filter(c=>c._fuDiff===0).length;
+        if(overdue)sub.textContent=overdue+' overdue, '+todayC+' today';
+        else if(todayC)sub.textContent=todayC+' due today';
+        else sub.textContent=fus.length+' upcoming this week';
+    }else{bar.style.display='none'}
+}
+
+function renderFollowUps(cards){
+    const today=new Date();today.setHours(0,0,0,0);
+    const fus=cards.filter(c=>c.followUpDate).map(c=>{
+        const d=new Date(c.followUpDate);d.setHours(0,0,0,0);
+        const diff=Math.floor((d-today)/86400000);
+        return {...c,_fuDiff:diff};
+    }).sort((a,b)=>a._fuDiff-b._fuDiff);
+    const el=document.getElementById('followupList');
+    if(!fus.length){el.innerHTML='<div class="profile-item" style="justify-content:center;color:#94a3b8;font-size:12px">No follow-ups set. Open a card and tap Follow-up.</div>';return}
+    el.innerHTML=fus.map(c=>{
+        const d=new Date(c.followUpDate);
+        const label=c._fuDiff<0?'overdue':c._fuDiff===0?'today':'upcoming';
+        const labelText=c._fuDiff<0?Math.abs(c._fuDiff)+'d overdue':c._fuDiff===0?'Today':'In '+c._fuDiff+'d';
+        return `<div class="fu-modal-row" onclick="openDetail(${c.id})">
+            <span class="fu-date">${d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</span>
+            <span class="fu-company">${esc(c.company_name||'Unknown')} ${c.full_name?'&middot; '+esc(c.full_name):''}</span>
+            <span class="fu-badge ${label}">${labelText}</span>
+        </div>`;
+    }).join('');
+}
+
 // ============ INIT ============
 async function init(){
     checkLogin();
@@ -1523,6 +1800,8 @@ async function init(){
     window.addEventListener('online',()=>{updateConn();toast('Online! Syncing...','&#128994;');setTimeout(syncAll,2000)});
     window.addEventListener('offline',()=>{updateConn();toast('Offline - saving locally','&#128268;')});
     setInterval(async()=>{if(navigator.onLine){const p=await dbIdx('cards','status','pending');if(p.length)syncAll()}},30000);
+    // Update follow-up badge on start
+    setTimeout(updateFollowUpBadge,2000);
 }
 init();
 </script>
