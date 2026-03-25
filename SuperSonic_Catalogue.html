@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Sonic | Industrial Machinery Products Catalogue 2025</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg-dark: #060d1a;
+  --bg-navy: #0a1628;
+  --bg-card: #0d1f38;
+  --accent: #00b4ff;
+  --accent2: #00e5ff;
+  --accent-glow: rgba(0,180,255,0.15);
+  --gold: #d4a853;
+  --text: #e8ecf1;
+  --text-dim: #8899aa;
+  --text-muted: #556677;
+  --white: #ffffff;
+  --red: #ff4757;
+  --green: #2ed573;
+  --purple: #a855f7;
+  --card-border: rgba(0,180,255,0.12);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+/* ===== NAVIGATION ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(6,13,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 65px;
+  transition: var(--transition);
+}
+.navbar.scrolled { background: rgba(6,13,26,0.98); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+
+.nav-brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--white);
+}
+.nav-brand .logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 18px; color: var(--bg-dark);
+}
+.nav-brand span { font-weight: 700; font-size: 18px; letter-spacing: 1px; }
+
+.nav-links { display: flex; gap: 8px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; font-weight: 500; padding: 8px 16px;
+  border-radius: 8px; transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--accent); background: var(--accent-glow);
+}
+
+.nav-contact {
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-contact a {
+  background: linear-gradient(135deg, var(--accent), #0088cc);
+  color: var(--white); padding: 8px 20px;
+  border-radius: 8px; text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  transition: var(--transition);
+}
+.nav-contact a:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,180,255,0.3); }
+
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, #0a1e3d 50%, #0d2847 100%);
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 100px 60px 60px;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(0,180,255,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(0,229,255,0.05) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(0,180,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-glow);
+  border: 1px solid var(--card-border);
+  padding: 6px 18px; border-radius: 50px;
+  font-size: 12px; color: var(--accent); font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 30px;
+  animation: fadeInDown 0.8s ease;
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: pulse 2s infinite;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 800; line-height: 1.05;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.8s ease;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 18px; color: var(--text-dim);
+  margin-bottom: 40px; max-width: 550px;
+  animation: fadeInUp 0.8s 0.2s ease both;
+}
+
+.hero-stats {
+  display: flex; gap: 40px;
+  animation: fadeInUp 0.8s 0.4s ease both;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat .num {
+  font-size: 32px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-stat .label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.hero-cats {
+  display: flex; gap: 12px; margin-top: 50px; flex-wrap: wrap;
+  animation: fadeInUp 0.8s 0.6s ease both;
+}
+.hero-cat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border);
+  padding: 12px 20px; border-radius: 12px;
+  font-size: 12px; font-weight: 600; color: var(--text-dim);
+  cursor: pointer; transition: var(--transition);
+  text-decoration: none;
+}
+.hero-cat:hover {
+  background: var(--accent-glow); color: var(--accent);
+  border-color: rgba(0,180,255,0.3);
+  transform: translateY(-3px);
+}
+
+/* Decorative floating shapes */
+.hero-visual {
+  position: absolute; right: 60px; top: 50%; transform: translateY(-50%);
+  width: 450px; height: 450px; z-index: 1;
+}
+.hex-ring {
+  position: absolute; width: 100%; height: 100%;
+  border: 2px solid var(--card-border);
+  border-radius: 50%;
+  animation: spin 30s linear infinite;
+}
+.hex-ring:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; animation-duration: 25s; animation-direction: reverse; border-style: dashed; }
+.hex-ring:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; animation-duration: 20s; }
+.hex-dot {
+  position: absolute; width: 10px; height: 10px;
+  background: var(--accent); border-radius: 50%;
+  box-shadow: 0 0 20px var(--accent);
+}
+.hex-dot:nth-child(4) { top: 0; left: 50%; }
+.hex-dot:nth-child(5) { bottom: 20%; right: 5%; }
+.hex-dot:nth-child(6) { top: 40%; left: 5%; }
+
+/* ===== SECTION STYLES ===== */
+.section {
+  padding: 80px 60px;
+  position: relative;
+}
+.section-header {
+  text-align: center; margin-bottom: 60px;
+}
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.section-tag::before, .section-tag::after {
+  content: ''; width: 30px; height: 1px; background: var(--accent);
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 42px); font-weight: 800;
+  margin-bottom: 15px;
+}
+.section-desc {
+  font-size: 16px; color: var(--text-dim);
+  max-width: 600px; margin: 0 auto;
+}
+
+/* ===== ABOUT / COMPANY PROFILE ===== */
+#about { background: linear-gradient(180deg, var(--bg-dark), var(--bg-navy)); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+.about-content h3 {
+  font-size: 28px; font-weight: 700; margin-bottom: 20px;
+}
+.about-content h3 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.about-text {
+  font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 25px;
+}
+.about-highlights {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+}
+.about-highlight {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  font-size: 13px; color: var(--text);
+  transition: var(--transition);
+}
+.about-highlight:hover { border-color: var(--accent); background: var(--accent-glow); }
+.about-highlight .icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+.values-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.value-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 24px;
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.value-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--accent);
+  transform: scaleX(0); transition: var(--transition);
+}
+.value-card:hover::before { transform: scaleX(1); }
+.value-card:hover { border-color: rgba(0,180,255,0.25); transform: translateY(-4px); }
+.value-card .v-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+}
+.value-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.value-card p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+.vc-blue .v-icon { background: rgba(0,180,255,0.12); }
+.vc-green .v-icon { background: rgba(46,213,115,0.12); }
+.vc-gold .v-icon { background: rgba(212,168,83,0.12); }
+.vc-purple .v-icon { background: rgba(168,85,247,0.12); }
+
+/* Stats bar */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; margin-top: 60px;
+  background: var(--card-border); border-radius: 16px; overflow: hidden;
+}
+.stat-item {
+  background: var(--bg-card); padding: 30px; text-align: center;
+  transition: var(--transition);
+}
+.stat-item:hover { background: rgba(0,180,255,0.05); }
+.stat-num {
+  font-size: 36px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+
+/* ===== PRODUCT SECTIONS ===== */
+.products-section {
+  background: var(--bg-dark);
+  border-top: 1px solid var(--card-border);
+}
+.products-section:nth-child(even) {
+  background: var(--bg-navy);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0,180,255,0.35);
+  box-shadow: 0 12px 40px rgba(0,180,255,0.1);
+}
+.product-card::after {
+  content: 'Click for Details';
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,180,255,0.9); color: var(--white);
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 10px; font-weight: 700;
+  opacity: 0; transform: translateY(-5px);
+  transition: var(--transition);
+}
+.product-card:hover::after { opacity: 1; transform: translateY(0); }
+
+.product-img {
+  width: 100%; height: 180px;
+  background: linear-gradient(135deg, #0f1d35, #0a1628);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
+  border-bottom: 1px solid var(--card-border);
+}
+.product-img img {
+  max-width: 90%; max-height: 90%; object-fit: contain;
+  transition: var(--transition);
+}
+.product-card:hover .product-img img { transform: scale(1.08); }
+.product-img .placeholder {
+  width: 80px; height: 80px;
+  border: 2px dashed rgba(0,180,255,0.3);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 11px; text-align: center;
+  padding: 10px;
+}
+
+.product-info { padding: 18px; }
+.product-brand {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent), #0088cc);
+  color: var(--white);
+  padding: 3px 10px; border-radius: 5px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.product-name {
+  font-size: 14px; font-weight: 700;
+  color: var(--white); margin-bottom: 6px;
+  line-height: 1.3;
+}
+.product-short {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+
+/* ===== MODAL / DETAIL POPUP ===== */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+  z-index: 2000;
+  display: none; align-items: center; justify-content: center;
+  padding: 30px;
+  animation: fadeIn 0.3s ease;
+}
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: linear-gradient(135deg, var(--bg-navy), var(--bg-card));
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  max-width: 750px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; color: var(--text-dim);
+  transition: var(--transition); z-index: 10;
+}
+.modal-close:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+
+.modal-img {
+  width: 100%; height: 280px;
+  background: linear-gradient(135deg, #0f1d35, #0a1628);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+}
+.modal-img img { max-width: 80%; max-height: 80%; object-fit: contain; }
+
+.modal-body { padding: 30px; }
+.modal-brand {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent), #0088cc);
+  color: var(--white);
+  padding: 4px 14px; border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  margin-bottom: 12px;
+}
+.modal-title {
+  font-size: 26px; font-weight: 800;
+  margin-bottom: 15px; line-height: 1.2;
+}
+.modal-desc {
+  font-size: 15px; color: var(--text-dim);
+  line-height: 1.8; margin-bottom: 25px;
+}
+
+.modal-specs {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 12px; overflow: hidden;
+  margin-bottom: 25px;
+}
+.modal-specs h4 {
+  padding: 14px 20px;
+  background: rgba(0,180,255,0.08);
+  font-size: 13px; font-weight: 700;
+  color: var(--accent); letter-spacing: 1px; text-transform: uppercase;
+  border-bottom: 1px solid var(--card-border);
+}
+.spec-row {
+  display: flex; justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-size: 14px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-row .spec-key { color: var(--text-muted); }
+.spec-row .spec-val { color: var(--text); font-weight: 600; }
+
+.modal-features {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 20px;
+}
+.modal-feature {
+  background: var(--accent-glow);
+  border: 1px solid var(--card-border);
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; color: var(--accent); font-weight: 600;
+}
+
+.modal-cta {
+  display: flex; gap: 12px; margin-top: 20px;
+}
+.btn-enquiry {
+  flex: 1; padding: 14px;
+  background: linear-gradient(135deg, var(--accent), #0088cc);
+  color: var(--white); border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: var(--transition); text-align: center;
+  text-decoration: none;
+}
+.btn-enquiry:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,180,255,0.3); }
+.btn-whatsapp {
+  flex: 1; padding: 14px;
+  background: rgba(37,211,102,0.12);
+  border: 1px solid rgba(37,211,102,0.3);
+  color: #25d366; border-radius: 10px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: var(--transition); text-align: center;
+  text-decoration: none;
+}
+.btn-whatsapp:hover { background: rgba(37,211,102,0.2); }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--card-border);
+  padding: 50px 60px 30px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px; margin-bottom: 40px;
+}
+.footer h4 {
+  font-size: 14px; font-weight: 700; margin-bottom: 16px;
+  color: var(--white);
+}
+.footer-brand p { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 15px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; transition: var(--transition);
+}
+.footer-links a:hover { color: var(--accent); }
+
+.footer-contact-item {
+  display: flex; gap: 10px; margin-bottom: 12px;
+  font-size: 13px; color: var(--text-dim);
+}
+.footer-contact-item .fc-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--accent-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.footer-bottom {
+  border-top: 1px solid var(--card-border);
+  padding-top: 20px;
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--text-muted);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+
+/* Scroll animations */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .hero { padding: 100px 30px 40px; }
+  .section { padding: 60px 30px; }
+  .hero-visual { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+}
+@media (max-width: 768px) {
+  .hero h1 { font-size: 36px; }
+  .hero-stats { gap: 25px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .modal { margin: 10px; }
+}
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .hero-cats { flex-direction: column; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  .navbar, .modal-overlay, .product-card::after { display: none !important; }
+  .hero { min-height: auto; padding: 40px; }
+  body { background: #fff; color: #000; }
+  .section { padding: 30px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-brand">
+    <div class="logo-icon">SS</div>
+    <span>SUPER SONIC</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#automation">Automation</a></li>
+    <li><a href="#mechanical">Mechanical</a></li>
+    <li><a href="#cnc">CNC</a></li>
+    <li><a href="#laser">Laser</a></li>
+    <li><a href="#welding">Welding</a></li>
+  </ul>
+  <div class="nav-contact">
+    <a href="tel:+916353767128">+91 63537 67128</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Trusted Since 2003
+    </div>
+    <h1>INDUSTRIAL<br>MACHINERY<br><span class="highlight">PRODUCTS</span></h1>
+    <p class="hero-sub">Premium quality industrial machinery components imported directly from world-class Chinese manufacturers. Delivering excellence to industries across India and globally.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">20+</div>
+        <div class="label">Years</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">42K</div>
+        <div class="label">Sq. Ft.</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">500+</div>
+        <div class="label">Clients</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">1000+</div>
+        <div class="label">Products</div>
+      </div>
+    </div>
+
+    <div class="hero-cats">
+      <a href="#automation" class="hero-cat">Industrial Automation</a>
+      <a href="#laser" class="hero-cat">Laser Machinery</a>
+      <a href="#cnc" class="hero-cat">CNC Machines</a>
+      <a href="#mechanical" class="hero-cat">Mechanical Parts</a>
+      <a href="#welding" class="hero-cat">Cutting & Welding</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hex-ring"></div>
+    <div class="hex-ring"></div>
+    <div class="hex-ring"></div>
+    <div class="hex-dot"></div>
+    <div class="hex-dot"></div>
+    <div class="hex-dot"></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="section" id="about">
+  <div class="section-header reveal">
+    <div class="section-tag">Who We Are</div>
+    <h2 class="section-title">Company <span class="highlight">Profile</span></h2>
+    <p class="section-desc">One of India's largest Import & Export trading companies for industrial machinery products</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-content reveal">
+      <h3>Building India's Industrial Future with <span class="highlight">World-Class Technology</span></h3>
+      <p class="about-text">
+        <strong>Super Sonic</strong> was established in <strong>2003</strong> and has grown to become one of the largest Import & Export Trading Companies in India. Headquartered in <strong>Surat, Gujarat</strong>, our state-of-the-art facility spans <strong>42,000 sq. ft</strong>, housing a comprehensive inventory of industrial machinery products sourced from the finest Chinese and international manufacturers.
+      </p>
+      <p class="about-text">
+        We are dedicated to serving High Quality and Cost-effective Products to our customers. Our extensive range covers <strong>Industrial Automation, CNC Machine Components, Laser Machinery, Mechanical Parts, Cutting & Welding Systems</strong>, and more. With hundreds of satisfied customers across India and internationally, we believe in long-term business relationships built on trust, quality, and mutual growth.
+      </p>
+
+      <div class="about-highlights">
+        <div class="about-highlight">
+          <div class="icon">&#9889;</div>
+          <span>Direct China Imports</span>
+        </div>
+        <div class="about-highlight">
+          <div class="icon">&#9733;</div>
+          <span>Premium Quality Products</span>
+        </div>
+        <div class="about-highlight">
+          <div class="icon">&#128230;</div>
+          <span>42,000 Sq. Ft. Warehouse</span>
+        </div>
+        <div class="about-highlight">
+          <div class="icon">&#127758;</div>
+          <span>Global Export Network</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="values-grid reveal">
+      <div class="value-card vc-blue">
+        <div class="v-icon">&#127919;</div>
+        <h4>Core Ideology</h4>
+        <p>We always search and work for the betterment and development of industries. Delivering excellent services & innovative solutions so industries can compete globally.</p>
+      </div>
+      <div class="value-card vc-green">
+        <div class="v-icon">&#129516;</div>
+        <h4>Our DNA</h4>
+        <p>Excellence | Ethics | Growth for All. We believe in accountability, constant search for improvement, and passionate commitment to growth for everyone associated with us.</p>
+      </div>
+      <div class="value-card vc-gold">
+        <div class="v-icon">&#129309;</div>
+        <h4>Business Mantra</h4>
+        <p>"Growing Together" - We build long-term business relationships with customers and suppliers based on trust, quality, and mutual benefit.</p>
+      </div>
+      <div class="value-card vc-purple">
+        <div class="v-icon">&#9889;</div>
+        <h4>Management Mantra</h4>
+        <p>Easy | Fast | Accurate. We deliver innovative value-for-money products with streamlined processes ensuring quick turnarounds.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar reveal">
+    <div class="stat-item">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">Years of Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">42,000</div>
+      <div class="stat-label">Sq. Ft. Facility</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Satisfied Customers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1000+</div>
+      <div class="stat-label">Products Range</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCT SECTIONS ===== -->
+<!-- Each section is generated by JS from the product data below -->
+<div id="product-sections"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h4>SUPER SONIC</h4>
+      <p>One of India's largest Import & Export Trading Companies for Industrial Machinery Products. Delivering premium quality products since 2003.</p>
+      <p style="color:var(--accent); font-weight:600; font-style:italic;">"Growing Together"</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#automation">Automation Products</a></li>
+        <li><a href="#mechanical">Mechanical Products</a></li>
+        <li><a href="#cnc">CNC Machine Products</a></li>
+        <li><a href="#laser">Laser Machinery</a></li>
+        <li><a href="#welding">Welding Parts</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Our Brands</h4>
+      <ul class="footer-links">
+        <li><a href="#">MiMY</a></li>
+        <li><a href="#">YAKO</a></li>
+        <li><a href="#">Panasonic</a></li>
+        <li><a href="#">MAX Photonics</a></li>
+        <li><a href="#">WSX</a></li>
+        <li><a href="#">BOCHU</a></li>
+        <li><a href="#">WEIHONG</a></li>
+        <li><a href="#">RichAuto</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item">
+        <div class="fc-icon">&#128205;</div>
+        <div>SUPER SONIC HOUSE<br>Plot No. C-10/5-6, Soma Kanji Estate-2, (SK-2)<br>Near Sosyo Circle, Opp. Sanidev Temple<br>Udhna Magdalla Road, Surat, Gujarat - 395007</div>
+      </div>
+      <div class="footer-contact-item">
+        <div class="fc-icon">&#128222;</div>
+        <div>+91 63537 67128<br>+91 92745 51510</div>
+      </div>
+      <div class="footer-contact-item">
+        <div class="fc-icon">&#128231;</div>
+        <div>info@supersonicgroup.in</div>
+      </div>
+      <div class="footer-contact-item">
+        <div class="fc-icon">&#127760;</div>
+        <div>www.supersonicgroup.in</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Super Sonic. All Rights Reserved.</span>
+    <span>Excellence | Ethics | Growth for All | Easy | Fast | Accurate</span>
+  </div>
+</footer>
+
+<!-- ===== PRODUCT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-close" onclick="closeModal()">&times;</div>
+    <div class="modal-img" id="modal-img"></div>
+    <div class="modal-body">
+      <div class="modal-brand" id="modal-brand"></div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-features" id="modal-features"></div>
+      <div class="modal-specs" id="modal-specs">
+        <h4>Specifications</h4>
+        <div id="modal-specs-body"></div>
+      </div>
+      <div class="modal-cta">
+        <a href="mailto:info@supersonicgroup.in?subject=Enquiry" class="btn-enquiry" id="modal-email">&#128231; Send Enquiry</a>
+        <a href="https://wa.me/916353767128" target="_blank" class="btn-whatsapp" id="modal-wa">&#128172; WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== PRODUCT DATA =====
+// IMAGE INSTRUCTIONS: Replace "img" values with your actual image file paths
+// Example: "img": "images/servo_motor.png"
+// Leave as "" for placeholder
+
+const productSections = [
+  {
+    id: "automation",
+    tag: "Precision Control",
+    title: "Industrial Automation Products",
+    desc: "High-precision servo motors, drivers, stepper motors, encoders and controllers for advanced automation systems",
+    products: [
+      {
+        name: "AC Servo Motor & Driver",
+        brand: "YAKO",
+        img: "",  // <-- PUT YOUR IMAGE PATH HERE
+        short: "High-torque AC servo system for precision motion control",
+        desc: "Premium quality AC Servo Motor & Driver system by YAKO, designed for high-performance industrial automation applications. Features precise position control, smooth torque output, and advanced feedback mechanisms for CNC machines, robotics, and automated manufacturing lines.",
+        features: ["High Torque", "Precision Control", "Low Vibration", "Easy Setup", "RS485 Communication"],
+        specs: { "Type": "AC Servo Motor + Driver", "Brand": "YAKO", "Voltage": "220V AC", "Communication": "RS485 / Pulse", "Application": "CNC, Robotics, Automation", "Warranty": "Available on Request" }
+      },
+      {
+        name: "Panasonic Servo Products",
+        brand: "Panasonic",
+        img: "",
+        short: "Premium Panasonic servo motors and drives",
+        desc: "Genuine Panasonic Servo Products including MINAS A6 series servo motors and drives. Industry-leading reliability, precision, and performance for demanding industrial applications. Known for their compact design and high-speed response capabilities.",
+        features: ["High Speed Response", "Compact Design", "MINAS A6 Series", "Auto Tuning", "Safety Functions"],
+        specs: { "Type": "Servo Motor & Drive", "Brand": "Panasonic", "Series": "MINAS A6 / A5", "Voltage": "200V / 400V", "Speed": "Up to 6000 RPM", "Application": "High-Speed Automation" }
+      },
+      {
+        name: "AC & DC Gear Motor",
+        brand: "MiMY",
+        img: "",
+        short: "Compact gear motors for versatile applications",
+        desc: "MiMY AC & DC Gear Motors designed for reliable power transmission in compact form factors. Available in various power ratings and gear ratios to suit diverse industrial requirements including conveyor systems, packaging machines, and material handling equipment.",
+        features: ["Compact Size", "High Efficiency", "Multiple Ratios", "Low Noise", "Long Life"],
+        specs: { "Type": "AC/DC Gear Motor", "Brand": "MiMY", "Power Range": "6W - 400W", "Gear Ratios": "3:1 to 200:1", "Voltage": "12V/24V DC, 110V/220V AC", "Application": "Conveyors, Packaging" }
+      },
+      {
+        name: "Stepper Motor",
+        brand: "MiMY",
+        img: "",
+        short: "Reliable stepper motors for position control",
+        desc: "MiMY Stepper Motors available in NEMA 17, 23, and 34 sizes. Ideal for applications requiring precise angular positioning without complex feedback systems. Used extensively in 3D printers, CNC routers, laser machines, and textile machinery.",
+        features: ["NEMA Standards", "High Holding Torque", "Open Loop Control", "Cost Effective", "2-Phase/3-Phase"],
+        specs: { "Type": "Stepper Motor", "Brand": "MiMY", "Sizes": "NEMA 17/23/34", "Step Angle": "1.8 degrees", "Phases": "2-Phase / 3-Phase", "Application": "CNC, 3D Printing, Laser" }
+      },
+      {
+        name: "Stepper Driver",
+        brand: "YAKO",
+        img: "",
+        short: "Advanced micro-stepping drivers for stepper motors",
+        desc: "YAKO Stepper Drivers with advanced micro-stepping technology for smooth and precise stepper motor control. Features anti-resonance technology, automatic current reduction, and multiple micro-stepping resolutions for optimal performance.",
+        features: ["Micro-stepping", "Anti-resonance", "Auto Current Reduction", "Opto-isolated Input", "Multiple Resolutions"],
+        specs: { "Type": "Stepper Motor Driver", "Brand": "YAKO", "Input Voltage": "24-80V DC", "Output Current": "Up to 8A", "Micro-stepping": "Up to 1/256", "Application": "CNC, Laser, Automation" }
+      },
+      {
+        name: "Close-Loop Motor & Driver",
+        brand: "YAKO",
+        img: "",
+        short: "Closed-loop stepper system for zero-loss positioning",
+        desc: "YAKO Close-Loop Stepper Motor & Driver system combining the simplicity of stepper motors with the reliability of servo systems. Built-in encoder provides real-time feedback ensuring zero step loss, making it perfect for precision applications.",
+        features: ["Zero Step Loss", "Built-in Encoder", "Energy Efficient", "Servo-like Performance", "Easy Integration"],
+        specs: { "Type": "Closed-Loop Stepper System", "Brand": "YAKO", "Encoder": "1000-line Incremental", "Voltage": "24-50V DC", "Torque": "Up to 12 N.m", "Application": "Precision Manufacturing" }
+      },
+      {
+        name: "Planetary Gear Box & Harmonic Gear Box",
+        brand: "MiMY",
+        img: "",
+        short: "Precision gearboxes for servo and stepper motors",
+        desc: "MiMY Planetary and Harmonic Gear Boxes designed for precise speed reduction and torque multiplication. Featuring low backlash, high efficiency, and compact design. Compatible with all standard servo and stepper motors for CNC, robotics, and automation.",
+        features: ["Low Backlash", "High Precision", "Compact Design", "High Torque Density", "Multiple Ratios"],
+        specs: { "Type": "Planetary / Harmonic Gearbox", "Brand": "MiMY", "Ratios": "3:1 to 100:1", "Backlash": "< 3 arcmin", "Efficiency": "> 95%", "Application": "CNC, Robotics, Servo Systems" }
+      },
+      {
+        name: "Encoder",
+        brand: "MiMY",
+        img: "",
+        short: "Rotary encoders for speed and position feedback",
+        desc: "MiMY Rotary Encoders providing accurate speed and position feedback for industrial automation systems. Available in incremental and absolute types with various resolution options. Essential component for closed-loop motion control systems.",
+        features: ["High Resolution", "Incremental/Absolute", "IP65 Protection", "Push-Pull Output", "Robust Construction"],
+        specs: { "Type": "Rotary Encoder", "Brand": "MiMY", "Resolution": "100 - 10000 PPR", "Output": "Push-Pull / Line Driver", "Protection": "IP65", "Application": "Motion Control, Feedback" }
+      }
+    ]
+  },
+  {
+    id: "mechanical",
+    tag: "Precision Engineering",
+    title: "Mechanical Products",
+    desc: "High-precision linear motion components, guideways, ball screws, and mechanical parts for CNC and automation",
+    products: [
+      {
+        name: "Block Guideway (Linear Guide)",
+        brand: "MiMY",
+        img: "",
+        short: "Precision linear guides for smooth motion",
+        desc: "MiMY Block Guideways (Linear Guides) providing ultra-smooth linear motion with high rigidity and load capacity. Available in various sizes and accuracy grades. Essential for CNC machines, laser cutters, and precision positioning systems.",
+        features: ["High Rigidity", "Low Friction", "Multiple Sizes", "Pre-loaded Options", "Long Service Life"],
+        specs: { "Type": "Linear Guide Rail + Block", "Brand": "MiMY", "Rail Width": "15/20/25/30/35/45mm", "Accuracy": "H/P/SP/UP Grade", "Load": "Up to 50kN", "Application": "CNC, Laser, Automation" }
+      },
+      {
+        name: "Rack and Gear",
+        brand: "MiMY",
+        img: "",
+        short: "Precision rack and pinion systems",
+        desc: "MiMY Rack and Gear systems for converting rotary motion to linear motion. Hardened and ground teeth ensure precision, durability, and smooth operation. Used in large-format CNC routers, plasma cutters, and gantry systems.",
+        features: ["Hardened Teeth", "Ground Finish", "Modular Design", "High Speed", "Heavy Duty"],
+        specs: { "Type": "Rack and Pinion", "Brand": "MiMY", "Module": "1/1.5/2/3", "Material": "C45 Steel, Hardened", "Length": "500mm/1000mm per piece", "Application": "CNC Gantry Systems" }
+      },
+      {
+        name: "Drag Chain (Cable Carrier)",
+        brand: "MiMY",
+        img: "",
+        short: "Cable carriers for clean cable management",
+        desc: "MiMY Drag Chains for organized and protected cable routing in CNC machines, laser cutters, and automated equipment. Prevents cable tangling, wear, and damage during high-speed machine operation.",
+        features: ["Cable Protection", "Easy Open Design", "Multiple Sizes", "High Speed", "Low Noise"],
+        specs: { "Type": "Cable Drag Chain", "Brand": "MiMY", "Inner Size": "Various (10x10 to 80x150mm)", "Material": "Engineering Plastic / Nylon", "Bend Radius": "28mm - 200mm", "Application": "CNC, Laser, Robotics" }
+      },
+      {
+        name: "Ball Screw",
+        brand: "MiMY",
+        img: "",
+        short: "Precision ball screws for linear positioning",
+        desc: "MiMY Ball Screws offering high precision linear motion with minimal backlash. Rolled and ground types available for various accuracy requirements. Critical component for CNC machine tool axes and precision positioning systems.",
+        features: ["Low Backlash", "High Accuracy", "Rolled/Ground", "Pre-loaded", "High Speed"],
+        specs: { "Type": "Ball Screw + Nut", "Brand": "MiMY", "Diameter": "12/16/20/25/32mm", "Lead": "4/5/10/16/20/25mm", "Accuracy": "C5/C7/C10", "Application": "CNC Axes, Positioning" }
+      },
+      {
+        name: "Cross Roller Guideway",
+        brand: "MiMY",
+        img: "",
+        short: "Ultra-precision cross roller linear guides",
+        desc: "MiMY Cross Roller Guideways providing ultra-high precision linear motion with cross-arranged cylindrical rollers. Superior rigidity and accuracy compared to ball-type guides, ideal for measuring instruments and precision equipment.",
+        features: ["Ultra-High Precision", "High Rigidity", "Compact Profile", "Cross Roller Design", "No Clearance"],
+        specs: { "Type": "Cross Roller Guide", "Brand": "MiMY", "Sizes": "Various", "Preload": "Standard/Light/Medium", "Accuracy": "High Grade", "Application": "Precision Equipment" }
+      },
+      {
+        name: "Aluminum Sliding Unit",
+        brand: "MiMY",
+        img: "",
+        short: "Lightweight aluminum linear slide units",
+        desc: "MiMY Aluminum Sliding Units providing compact linear motion solutions. Lightweight yet rigid aluminum construction with integrated linear bearings for smooth operation. Perfect for pneumatic cylinders, sensor mounting, and light-duty automation.",
+        features: ["Lightweight", "Compact", "Integrated Bearings", "Easy Mounting", "Maintenance Free"],
+        specs: { "Type": "Aluminum Linear Slide", "Brand": "MiMY", "Stroke": "Custom", "Material": "Anodized Aluminum", "Bearing": "Integrated LM Bearings", "Application": "Light Automation, Sensors" }
+      },
+      {
+        name: "Single Axis Linear Actuator",
+        brand: "MiMY",
+        img: "",
+        short: "Motorized single-axis positioning stages",
+        desc: "MiMY Single Axis Linear Actuators providing complete motorized linear positioning in one integrated package. Features ball screw or belt drive, linear guide, and motor mount. Ready-to-use solution for automated positioning applications.",
+        features: ["Integrated Design", "Ball Screw / Belt", "High Speed", "Motorized", "Ready to Use"],
+        specs: { "Type": "Linear Actuator Module", "Brand": "MiMY", "Drive": "Ball Screw / Belt", "Stroke": "100mm - 1500mm", "Speed": "Up to 1m/s (Belt)", "Application": "Pick & Place, Positioning" }
+      },
+      {
+        name: "DIAMOND Moly Wire",
+        brand: "Diamond",
+        img: "",
+        short: "Premium molybdenum wire for EDM machines",
+        desc: "Diamond brand premium Molybdenum Wire for EDM Wire Cut machines. Ultra-high purity molybdenum ensures consistent cutting performance, minimal wire breakage, and excellent surface finish quality.",
+        features: ["High Purity", "Low Breakage", "Consistent Performance", "Clean Cut", "Long Lasting"],
+        specs: { "Type": "EDM Moly Wire", "Brand": "Diamond", "Material": "Molybdenum", "Diameter": "0.18mm", "Spool": "2000m / Roll", "Application": "EDM Wire Cut Machines" }
+      },
+      {
+        name: "MIMY Moly Wire",
+        brand: "MiMY",
+        img: "",
+        short: "Cost-effective molybdenum EDM wire",
+        desc: "MiMY brand Molybdenum Wire offering excellent cost-performance ratio for EDM Wire Cut machines. Good tensile strength and consistent diameter for reliable cutting operations.",
+        features: ["Cost Effective", "Good Tensile Strength", "Consistent Diameter", "Reliable", "Bulk Available"],
+        specs: { "Type": "EDM Moly Wire", "Brand": "MiMY", "Material": "Molybdenum", "Diameter": "0.18mm", "Spool": "2000m / Roll", "Application": "EDM Wire Cut Machines" }
+      },
+      {
+        name: "JR1A Composite Liquid",
+        brand: "Jiarun",
+        img: "",
+        short: "EDM working fluid for optimal cutting",
+        desc: "Jiarun JR1A Composite Liquid designed specifically for EDM Wire Cut machines. Provides optimal dielectric properties, cooling, and flushing for clean, precise cuts with minimal wire breakage and excellent surface finish.",
+        features: ["Optimal Dielectric", "Good Cooling", "Clean Flushing", "Anti-Corrosion", "Long Life"],
+        specs: { "Type": "EDM Working Fluid", "Brand": "Jiarun", "Model": "JR1A", "Volume": "20L / Barrel", "Application": "EDM Wire Cut", "Properties": "Dielectric, Cooling, Anti-rust" }
+      },
+      {
+        name: "JR3A Super Ointment (Coolant Gel)",
+        brand: "Jiarun",
+        img: "",
+        short: "Premium coolant gel for EDM machines",
+        desc: "Jiarun JR3A Super Ointment Coolant Gel for EDM Wire Cut machines. Provides excellent lubrication, cooling, and rust prevention. Extends wire life and improves surface finish quality during EDM cutting operations.",
+        features: ["Superior Cooling", "Rust Prevention", "Extends Wire Life", "Better Finish", "Easy Mixing"],
+        specs: { "Type": "Coolant Gel / Ointment", "Brand": "Jiarun", "Model": "JR3A", "Weight": "1kg / Jar", "Application": "EDM Wire Cut", "Properties": "Lubricant, Coolant, Anti-rust" }
+      }
+    ]
+  },
+  {
+    id: "pneumatic",
+    tag: "Air Power",
+    title: "Pneumatic Parts",
+    desc: "Industrial-grade pneumatic cylinders, valves and components for automated systems",
+    products: [
+      {
+        name: "Pneumatic Cylinder",
+        brand: "MiMY",
+        img: "",
+        short: "Industrial pneumatic cylinders for automation",
+        desc: "MiMY Pneumatic Cylinders available in single-acting and double-acting configurations. Suitable for a wide range of industrial automation, clamping, and material handling applications. Standard and custom stroke lengths available.",
+        features: ["Double Acting", "Adjustable Cushion", "Magnetic Piston", "ISO Standard", "Corrosion Resistant"],
+        specs: { "Type": "Pneumatic Cylinder", "Brand": "MiMY", "Bore": "32-100mm", "Stroke": "Custom", "Pressure": "1-9 Bar", "Application": "Automation, Clamping" }
+      },
+      {
+        name: "Pneumatic Valve",
+        brand: "MiMY",
+        img: "",
+        short: "Solenoid valves for pneumatic control",
+        desc: "MiMY Pneumatic Valves including 2-way, 3-way, and 5-way solenoid valves for precise pneumatic control. Reliable electromagnetic actuation with quick response time for automated pneumatic circuits.",
+        features: ["Quick Response", "Low Power Consumption", "Solenoid Actuated", "Multiple Port Sizes", "DC/AC Available"],
+        specs: { "Type": "Solenoid Valve", "Brand": "MiMY", "Configuration": "2/3/5 Way", "Port Size": "1/8\" to 1/2\"", "Voltage": "12V/24V DC, 110V/220V AC", "Application": "Pneumatic Control" }
+      }
+    ]
+  },
+  {
+    id: "cnc",
+    tag: "Precision Machining",
+    title: "CNC Machine Products",
+    desc: "Complete range of CNC spindle motors, controllers, and accessories for high-performance machining",
+    products: [
+      {
+        name: "Spindle Motor",
+        brand: "MiMY / HQD",
+        img: "",
+        short: "High-speed CNC spindle motors",
+        desc: "MiMY & HQD Spindle Motors for CNC routers and engraving machines. Water-cooled and air-cooled options available. Features high-speed bearings, balanced rotors, and ER collet chuck for reliable tool holding.",
+        features: ["Water/Air Cooled", "High RPM", "Low Vibration", "ER Collet", "Ceramic Bearings"],
+        specs: { "Type": "CNC Spindle Motor", "Brand": "MiMY / HQD", "Power": "0.8kW - 12kW", "Speed": "6000 - 60000 RPM", "Cooling": "Water / Air Cooled", "Application": "CNC Router, Engraving" }
+      },
+      {
+        name: "Dust Collector",
+        brand: "MiMY",
+        img: "",
+        short: "Industrial dust collection systems",
+        desc: "MiMY Dust Collectors designed for CNC machines, providing clean working environments by efficiently capturing wood dust, metal chips, and debris during machining operations.",
+        features: ["High Suction", "Large Capacity", "Easy Cleaning", "Low Noise", "Portable"],
+        specs: { "Type": "Dust Collector", "Brand": "MiMY", "Power": "1.5kW - 5.5kW", "Capacity": "Large bag", "Application": "CNC Woodworking, Metal", "Filtration": "Multi-stage" }
+      },
+      {
+        name: "CNC Gear Box",
+        brand: "MiMY",
+        img: "",
+        short: "Speed reduction gearboxes for CNC spindles",
+        desc: "MiMY CNC Gear Boxes providing speed reduction and torque multiplication for CNC spindle motors. Helical gear design ensures smooth, quiet operation with minimal backlash for precision machining.",
+        features: ["Helical Gears", "Low Noise", "High Torque", "Compact", "Multiple Ratios"],
+        specs: { "Type": "CNC Spindle Gearbox", "Brand": "MiMY", "Ratios": "1:3, 1:4, 1:5", "Input Speed": "Up to 6000 RPM", "Material": "Hardened Steel", "Application": "CNC Spindle Speed Reduction" }
+      },
+      {
+        name: "Rich Auto Controllers",
+        brand: "RichAuto",
+        img: "",
+        short: "DSP-based CNC motion controllers",
+        desc: "RichAuto DSP Controllers (A11, B51, B55) for CNC routers. Stand-alone operation with USB connectivity, supports 3/4 axis motion control. User-friendly interface with Chinese and English language support.",
+        features: ["Stand-alone", "USB Interface", "3/4 Axis", "G-code Support", "LCD Display"],
+        specs: { "Type": "DSP CNC Controller", "Brand": "RichAuto", "Models": "A11 / B51 / B55", "Axes": "3-4 Axis", "Interface": "USB", "Application": "CNC Router Control" }
+      },
+      {
+        name: "CNC Controllers (WEIHONG)",
+        brand: "WEIHONG",
+        img: "",
+        short: "Professional CNC control systems",
+        desc: "WEIHONG CNC Control Systems providing professional-grade motion control for CNC routers, plasma cutters, and laser machines. Supports multi-axis interpolation with high-speed processing capability.",
+        features: ["Multi-axis", "High Speed Processing", "Ethernet", "Professional Grade", "Reliable"],
+        specs: { "Type": "CNC Control System", "Brand": "WEIHONG", "Axes": "3-6 Axis", "Interface": "Ethernet / USB", "Processing": "High-speed Interpolation", "Application": "CNC Router, Plasma, Laser" }
+      },
+      {
+        name: "Servo Spindle Motor",
+        brand: "MiMY",
+        img: "",
+        short: "Servo-driven CNC spindle motors",
+        desc: "MiMY Servo Spindle Motors combining the precision of servo control with spindle motor performance. Features closed-loop speed control, orientation capability, and rigid tapping support for advanced CNC machining.",
+        features: ["Closed Loop", "Rigid Tapping", "Orientation", "C-axis Capable", "Energy Efficient"],
+        specs: { "Type": "Servo Spindle Motor", "Brand": "MiMY", "Power": "1.5kW - 7.5kW", "Speed": "Up to 8000 RPM", "Control": "Closed-loop Servo", "Application": "CNC Machining Centers" }
+      },
+      {
+        name: "SAW Blade Spindle Motors",
+        brand: "MiMY",
+        img: "",
+        short: "Heavy-duty motors for stone/glass cutting",
+        desc: "MiMY SAW Blade Spindle Motors designed specifically for stone cutting, glass cutting, and ceramic processing machines. Heavy-duty construction with high torque at low speeds for clean, precise cuts.",
+        features: ["Heavy Duty", "High Torque", "Low Speed Option", "Water Resistant", "Durable"],
+        specs: { "Type": "SAW Blade Motor", "Brand": "MiMY", "Power": "3kW - 15kW", "Speed": "1400 - 3000 RPM", "Protection": "IP55", "Application": "Stone, Glass Cutting" }
+      },
+      {
+        name: "Stone Bridge Cutting Motors",
+        brand: "MiMY",
+        img: "",
+        short: "Bridge saw motors for stone industry",
+        desc: "MiMY Stone Bridge Cutting Motors for bridge saw machines used in marble, granite, and stone cutting. High power output with robust construction for continuous heavy-duty stone processing operations.",
+        features: ["High Power", "Continuous Duty", "Robust Build", "Bridge Saw", "Stone Industry"],
+        specs: { "Type": "Bridge Cutting Motor", "Brand": "MiMY", "Power": "5.5kW - 22kW", "Speed": "1400 - 2800 RPM", "Protection": "IP55", "Application": "Marble, Granite Bridge Saw" }
+      }
+    ]
+  },
+  {
+    id: "laser",
+    tag: "Advanced Technology",
+    title: "Laser Machinery Products",
+    desc: "Complete laser systems including fiber lasers, CO2 lasers, optics, galvo scanners, and control systems",
+    products: [
+      {
+        name: "Q-switch Pulsed Fiber Laser",
+        brand: "Lianpin",
+        img: "",
+        short: "Pulsed fiber laser source for marking",
+        desc: "Lianpin Q-switch Pulsed Fiber Laser sources for high-speed laser marking and engraving. Available in 20W, 30W, and 50W configurations. Ideal for marking metals, plastics, and other materials with high precision.",
+        features: ["High Speed Marking", "Long Laser Life", "Air Cooled", "Maintenance Free", "Stable Output"],
+        specs: { "Type": "Pulsed Fiber Laser", "Brand": "Lianpin", "Power": "20W / 30W / 50W", "Wavelength": "1064nm", "Laser Life": "100,000+ Hours", "Application": "Laser Marking, Engraving" }
+      },
+      {
+        name: "Laser Source",
+        brand: "MAX Photonics",
+        img: "",
+        short: "MAX fiber laser sources for cutting & welding",
+        desc: "MAX Photonics Fiber Laser Sources available from 500W to 6000W for laser cutting and welding machines. Industry-leading wall-plug efficiency, stable beam quality, and long service life.",
+        features: ["High Power", "Excellent Beam Quality", "Energy Efficient", "Long Life", "Compact"],
+        specs: { "Type": "CW Fiber Laser Source", "Brand": "MAX Photonics", "Power": "500W - 6000W", "Wavelength": "1070nm", "Efficiency": ">30%", "Application": "Laser Cutting, Welding" }
+      },
+      {
+        name: "UV Source",
+        brand: "Gainlaser",
+        img: "",
+        short: "UV laser for ultra-fine marking",
+        desc: "Gainlaser UV Laser Sources operating at 355nm wavelength for ultra-fine, cold marking on sensitive materials. Perfect for marking on glass, crystals, plastics, and medical devices without heat damage.",
+        features: ["Cold Marking", "Ultra-Fine", "355nm UV", "No Heat Damage", "High Precision"],
+        specs: { "Type": "UV Laser Source", "Brand": "Gainlaser", "Power": "3W / 5W / 10W", "Wavelength": "355nm", "Application": "Glass, Crystal, Plastic Marking", "Type_": "DPSS" }
+      },
+      {
+        name: "RF Co2 Laser Source",
+        brand: "DAVI",
+        img: "",
+        short: "Metal RF CO2 laser tubes",
+        desc: "DAVI RF-excited CO2 Laser Sources providing excellent beam quality for laser marking and cutting of non-metals. Long service life, maintenance-free operation, and consistent power output.",
+        features: ["RF Excited", "Sealed Tube", "Maintenance Free", "Long Life", "Good Beam Quality"],
+        specs: { "Type": "RF CO2 Laser", "Brand": "DAVI", "Power": "30W / 60W / 100W", "Wavelength": "10.6 um", "Cooling": "Air / Water", "Application": "Non-metal Marking & Cutting" }
+      },
+      {
+        name: "Galvo Scanner Head",
+        brand: "MiMY",
+        img: "",
+        short: "High-speed galvo scanners for laser marking",
+        desc: "MiMY Galvo Scanner Heads for laser marking machines. Ultra-fast scanning speed with precise beam positioning. Available in 10mm and 14mm aperture sizes for different laser power ranges.",
+        features: ["Ultra Fast", "High Precision", "10mm/14mm Aperture", "Digital/Analog", "Long Life"],
+        specs: { "Type": "Galvo Scanner", "Brand": "MiMY", "Aperture": "10mm / 14mm", "Speed": "Up to 12000mm/s", "Interface": "XY2-100", "Application": "Laser Marking Machines" }
+      },
+      {
+        name: "JCZ/EZ Card Control Board",
+        brand: "JCZ",
+        img: "",
+        short: "Laser marking control boards",
+        desc: "JCZ EZCAD compatible laser marking control boards. Industry-standard control solution supporting various laser sources, galvo scanners, and marking features. Compatible with EZCAD software for easy operation.",
+        features: ["EZCAD Compatible", "USB Interface", "Multiple Laser Support", "Fly Marking", "IO Control"],
+        specs: { "Type": "Laser Control Board", "Brand": "JCZ (Beijing JinHaiChuang)", "Software": "EZCAD 2/3", "Interface": "USB", "Supported Lasers": "Fiber, CO2, UV", "Application": "Laser Marking Control" }
+      },
+      {
+        name: "Fly Mark Controller",
+        brand: "JCZ",
+        img: "",
+        short: "On-the-fly laser marking controller",
+        desc: "JCZ Fly Mark Controller enabling high-speed laser marking on moving products (production line marking). Synchronizes laser marking with conveyor speed for continuous marking without stopping the line.",
+        features: ["On-the-fly Marking", "Speed Sync", "Encoder Input", "Production Line", "High Speed"],
+        specs: { "Type": "Fly Marking Controller", "Brand": "JCZ", "Synchronization": "Encoder-based", "Speed": "Up to 100m/min", "Interface": "USB + Encoder", "Application": "Production Line Marking" }
+      },
+      {
+        name: "F-Theta Scan Lens",
+        brand: "MiMY",
+        img: "",
+        short: "Flat-field scanning lenses for laser",
+        desc: "MiMY F-Theta Scan Lenses providing flat-field focusing for galvo-based laser marking and engraving. Available in various focal lengths and wavelengths (1064nm, 10.6um, 355nm) for different marking field sizes.",
+        features: ["Flat Field", "AR Coated", "Multiple Wavelengths", "Various Field Sizes", "High Damage Threshold"],
+        specs: { "Type": "F-Theta Lens", "Brand": "MiMY", "Wavelengths": "1064nm, 10.6um, 355nm", "Field Sizes": "110x110 to 300x300mm", "Material": "Fused Silica / ZnSe", "Application": "Laser Marking, Engraving" }
+      },
+      {
+        name: "All Optics (Laser Optics)",
+        brand: "MiMY",
+        img: "",
+        short: "Complete range of laser optical components",
+        desc: "MiMY complete range of laser optical components including mirrors, focus lenses, protective windows, beam combiners, and collimators. Available for 1064nm Fiber, 10.6um CO2, and 355nm UV laser systems.",
+        features: ["Full Range", "AR/HR Coated", "Multiple Materials", "All Wavelengths", "Custom Available"],
+        specs: { "Type": "Laser Optics", "Brand": "MiMY", "Types": "Mirror, Lens, Window, Combiner", "Materials": "ZnSe, Fused Silica, Ge, BK7", "Wavelengths": "355nm, 1064nm, 10.6um", "Application": "All Laser Systems" }
+      },
+      {
+        name: "Column & Beampath",
+        brand: "MiMY",
+        img: "",
+        short: "Adjustable columns and beam delivery",
+        desc: "MiMY Laser Marking Machine Columns and Beampath assemblies. Height-adjustable column with integrated beam delivery system for proper focusing and alignment of laser marking systems.",
+        features: ["Height Adjustable", "Integrated Design", "Easy Alignment", "Sturdy Build", "Red Pointer"],
+        specs: { "Type": "Column & Beampath Assembly", "Brand": "MiMY", "Adjustment": "Manual / Motorized", "Height": "400-600mm", "Material": "Aluminum Alloy", "Application": "Laser Marking Machine Build" }
+      },
+      {
+        name: "Rotary with Chuck",
+        brand: "MiMY",
+        img: "",
+        short: "Rotary attachment for cylindrical marking",
+        desc: "MiMY Rotary Attachment with Chuck for laser marking on cylindrical, round, and ring-shaped objects. Features 3-jaw or 4-jaw chuck, stepper motor drive, and EZCAD compatible controller.",
+        features: ["3/4-Jaw Chuck", "360 Rotation", "EZCAD Compatible", "Adjustable Speed", "Easy Setup"],
+        specs: { "Type": "Laser Rotary Attachment", "Brand": "MiMY", "Chuck": "3-Jaw / 4-Jaw", "Motor": "Stepper Motor", "Rotation": "360 degrees", "Application": "Cylindrical Marking" }
+      },
+      {
+        name: "CO2 Laser Glass Tube & Power Supply",
+        brand: "EFR Laser",
+        img: "",
+        short: "CO2 glass laser tubes with matched PSU",
+        desc: "EFR CO2 Laser Glass Tubes with matched Power Supply units. Available from 40W to 300W for CO2 laser cutting and engraving machines. Known for stable power output and long service life.",
+        features: ["Stable Output", "Long Life", "Matched PSU", "TEM00 Beam", "Various Powers"],
+        specs: { "Type": "CO2 Glass Laser Tube + PSU", "Brand": "EFR (Beijing EFR Laser)", "Power": "40W to 300W", "Wavelength": "10.6um", "Life": "6000-10000 Hours", "Application": "CO2 Laser Cutting & Engraving" }
+      }
+    ]
+  },
+  {
+    id: "welding",
+    tag: "Industrial Solutions",
+    title: "Spot Welding & Laser Cutting Parts",
+    desc: "Complete range of welding machine components, laser cutting heads, and welding systems",
+    products: [
+      {
+        name: "Power Supply (Welding)",
+        brand: "Generic",
+        img: "",
+        short: "Power supply units for welding machines",
+        desc: "Industrial Power Supply units designed for YAG laser welding and spot welding machines. Providing stable, regulated power output for consistent welding quality and machine reliability.",
+        features: ["Stable Output", "Regulated", "Protection Circuits", "Industrial Grade", "Reliable"],
+        specs: { "Type": "Welding Power Supply", "Application": "YAG Laser / Spot Welding", "Input": "380V 3-Phase", "Protection": "Over-current, Over-voltage", "Cooling": "Forced Air", "Grade": "Industrial" }
+      },
+      {
+        name: "Optical Path Assembly",
+        brand: "Generic",
+        img: "",
+        short: "Beam delivery for YAG welding",
+        desc: "Optical Path Assembly for YAG laser welding machines. Includes beam delivery optics, mirrors, and focusing assembly for directing and focusing the laser beam onto the workpiece with precision.",
+        features: ["Precision Alignment", "Coated Optics", "Adjustable Focus", "Integrated Design", "Easy Maintenance"],
+        specs: { "Type": "Optical Path / Beam Delivery", "Application": "YAG Laser Welding", "Components": "Mirrors, Lenses, Mounts", "Wavelength": "1064nm", "Delivery": "Fiber / Free-space", "Maintenance": "Mirror cleaning periodic" }
+      },
+      {
+        name: "All Optics (Welding)",
+        brand: "Generic",
+        img: "",
+        short: "Optical components for welding machines",
+        desc: "Complete range of optical components for YAG and fiber laser welding machines. Includes protective windows, focusing lenses, collimating lenses, and reflective mirrors for various welding configurations.",
+        features: ["Welding Grade", "High Damage Threshold", "AR Coated", "Multiple Sizes", "Replacement Parts"],
+        specs: { "Type": "Welding Optics", "Components": "Windows, Lenses, Mirrors", "Wavelength": "1064nm / 1070nm", "Material": "Fused Silica, BK7", "Coating": "AR / HR", "Application": "Laser Welding Machines" }
+      },
+      {
+        name: "Pulsed Xenon Lamp",
+        brand: "Generic",
+        img: "",
+        short: "Flash lamps for YAG laser pumping",
+        desc: "Pulsed Xenon Flash Lamps for pumping YAG laser crystals in welding and cutting machines. High-quality quartz construction with gold-plated connectors for reliable, long-lasting performance.",
+        features: ["High Quality Quartz", "Gold Connectors", "Long Pulse Life", "Consistent Output", "Multiple Sizes"],
+        specs: { "Type": "Xenon Flash Lamp", "Material": "Quartz Glass", "Gas": "Xenon", "Connectors": "Gold Plated", "Life": "1-5 Million Pulses", "Application": "YAG Laser Pumping" }
+      },
+      {
+        name: "YAG Crystal Rod",
+        brand: "Generic",
+        img: "",
+        short: "Nd:YAG laser crystal rods",
+        desc: "Nd:YAG Laser Crystal Rods for YAG laser welding and cutting machines. High optical quality with precise dimensions and Nd doping concentration for optimal laser performance.",
+        features: ["High Optical Quality", "Precise Dimensions", "Optimized Doping", "Polished Ends", "Replacement Part"],
+        specs: { "Type": "Nd:YAG Crystal Rod", "Material": "Nd:YAG", "Wavelength": "1064nm", "Ends": "AR Coated / Polished", "Sizes": "Various diameters & lengths", "Application": "YAG Laser Source" }
+      },
+      {
+        name: "ND 31 Laser Cutting Head",
+        brand: "WSX",
+        img: "",
+        short: "Auto-focus fiber laser cutting head",
+        desc: "WSX ND 31 Auto-Focus Fiber Laser Cutting Head for metal sheet cutting. Features motorized auto-focus, capacitive height sensing, and QBH fiber connector. Supports up to 3kW fiber laser for cutting steel, aluminum, and other metals.",
+        features: ["Auto Focus", "Capacitive Sensing", "QBH Connector", "Up to 3kW", "Clean Cutting"],
+        specs: { "Type": "Fiber Laser Cutting Head", "Brand": "WSX", "Model": "ND 31", "Power": "Up to 3kW", "Focus": "Auto (Motorized)", "Application": "Metal Sheet Cutting" }
+      },
+      {
+        name: "NC36 Laser Cutting Head",
+        brand: "WSX",
+        img: "",
+        short: "Heavy-duty laser cutting head",
+        desc: "WSX NC36 Heavy-Duty Fiber Laser Cutting Head for high-power metal cutting applications. Designed for 3-6kW fiber lasers with advanced cooling and protective lens monitoring for extended operation.",
+        features: ["High Power", "Advanced Cooling", "Lens Monitoring", "Heavy Duty", "6kW Support"],
+        specs: { "Type": "Fiber Laser Cutting Head", "Brand": "WSX", "Model": "NC36", "Power": "3kW - 6kW", "Focus": "Auto", "Application": "Heavy-Duty Metal Cutting" }
+      },
+      {
+        name: "HD 31 Welding Head",
+        brand: "WSX",
+        img: "",
+        short: "Handheld fiber laser welding head",
+        desc: "WSX HD 31 Handheld Fiber Laser Welding Head for manual fiber laser welding operations. Ergonomic design with wobble welding capability, adjustable focal length, and integrated safety features.",
+        features: ["Handheld", "Wobble Welding", "Ergonomic", "Safety Interlock", "Adjustable Focus"],
+        specs: { "Type": "Handheld Welding Head", "Brand": "WSX", "Model": "HD 31", "Power": "Up to 2kW", "Welding": "Wobble / Linear", "Application": "Manual Laser Welding" }
+      },
+      {
+        name: "BLT310 Laser Welding Controller",
+        brand: "BOCHU",
+        img: "",
+        short: "Complete YAG welding machine controller",
+        desc: "BOCHU BLT310 Laser Welding Controller providing complete control solution for YAG laser welding machines. Features pulse parameter control, multi-segment waveform, and integrated energy monitoring.",
+        features: ["Pulse Control", "Multi-segment Waveform", "Energy Monitor", "LCD Display", "Complete Solution"],
+        specs: { "Type": "Welding Machine Controller", "Brand": "BOCHU", "Model": "BLT310", "Laser Type": "YAG", "Control": "Pulse Shape, Width, Frequency", "Application": "YAG Laser Welding Machine" }
+      },
+      {
+        name: "FS 2000E Power System",
+        brand: "BOCHU",
+        img: "",
+        short: "High-power laser welding power system",
+        desc: "BOCHU FS 2000E High-Power Laser Welding Power System providing regulated, stable power for YAG laser welding machines. Features IGBT technology, digital display, and comprehensive protection circuits.",
+        features: ["IGBT Technology", "Digital Display", "Protection Circuits", "Stable Output", "High Power"],
+        specs: { "Type": "Laser Welding Power System", "Brand": "BOCHU", "Model": "FS 2000E", "Power": "2000W", "Technology": "IGBT", "Application": "YAG Laser Welding" }
+      },
+      {
+        name: "BLT421S Controller",
+        brand: "BOCHU",
+        img: "",
+        short: "Advanced multi-function welding controller",
+        desc: "BOCHU BLT421S Advanced Multi-function Welding Controller for sophisticated laser welding applications. Supports multiple welding modes, recipe storage, and production counting for professional welding operations.",
+        features: ["Multi-mode", "Recipe Storage", "Production Counter", "Advanced Control", "Professional"],
+        specs: { "Type": "Advanced Welding Controller", "Brand": "BOCHU", "Model": "BLT421S", "Modes": "Spot, Seam, Butt Welding", "Memory": "Multiple Recipes", "Application": "Professional Laser Welding" }
+      },
+      {
+        name: "MAX Photonics Laser Source (High Power)",
+        brand: "MAX Photonics",
+        img: "",
+        short: "High-power CW fiber laser for cutting",
+        desc: "MAX Photonics High-Power Continuous Wave Fiber Laser Sources for industrial laser cutting machines. Available from 1kW to 6kW with excellent beam quality, high efficiency, and compact design.",
+        features: ["High Power CW", "Excellent Beam", "High Efficiency", "Compact", "Industrial Grade"],
+        specs: { "Type": "CW Fiber Laser Source", "Brand": "MAX Photonics", "Power": "1kW - 6kW", "Wavelength": "1070nm", "Beam Quality": "< 5mm*mrad", "Application": "Industrial Metal Cutting" }
+      },
+      {
+        name: "S & A Industrial Chiller",
+        brand: "S&A (Teyu)",
+        img: "",
+        short: "Industrial water chillers for laser cooling",
+        desc: "S&A (Teyu) Industrial Water Chillers designed specifically for cooling laser sources, spindle motors, and CNC machines. Precise temperature control ensures stable laser operation and extended component life.",
+        features: ["Precise Temp Control", "Dual Temperature", "Alarm System", "Energy Efficient", "Laser Optimized"],
+        specs: { "Type": "Industrial Water Chiller", "Brand": "S&A (Teyu)", "Cooling": "1kW - 10kW", "Temperature": "+/- 0.3C", "Refrigerant": "R410A", "Application": "Laser, CNC, Spindle Cooling" }
+      },
+      {
+        name: "RK Chunk Rotary",
+        brand: "RK",
+        img: "",
+        short: "Rotary chuck for laser tube cutting",
+        desc: "RK Chunk Rotary attachment for laser cutting machines enabling tube and pipe cutting capability. Heavy-duty pneumatic or electric chuck with through-hole design for processing various tube profiles.",
+        features: ["Pneumatic/Electric", "Through-hole", "Heavy Duty", "Multiple Profiles", "Auto Centering"],
+        specs: { "Type": "Rotary Chuck Attachment", "Brand": "RK", "Chuck Type": "Pneumatic / Electric", "Jaw": "3-Jaw / 4-Jaw", "Through-hole": "Yes", "Application": "Tube & Pipe Laser Cutting" }
+      }
+    ]
+  }
+];
+
+// ===== RENDER PRODUCT SECTIONS =====
+function renderSections() {
+  const container = document.getElementById('product-sections');
+  let html = '';
+
+  productSections.forEach((section, sIdx) => {
+    html += `
+    <section class="section products-section" id="${section.id}">
+      <div class="section-header reveal">
+        <div class="section-tag">${section.tag}</div>
+        <h2 class="section-title">${section.title}</h2>
+        <p class="section-desc">${section.desc}</p>
+      </div>
+      <div class="products-grid">
+    `;
+
+    section.products.forEach((product, pIdx) => {
+      const imgHtml = product.img
+        ? `<img src="${product.img}" alt="${product.name}">`
+        : `<div class="placeholder">Add Image<br><small>${product.name}</small></div>`;
+
+      html += `
+        <div class="product-card reveal" onclick="openModal(${sIdx}, ${pIdx})">
+          <div class="product-img">${imgHtml}</div>
+          <div class="product-info">
+            <span class="product-brand">${product.brand}</span>
+            <div class="product-name">${product.name}</div>
+            <div class="product-short">${product.short}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div></section>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ===== MODAL =====
+function openModal(sIdx, pIdx) {
+  const product = productSections[sIdx].products[pIdx];
+  const modal = document.getElementById('modal');
+
+  document.getElementById('modal-brand').textContent = product.brand;
+  document.getElementById('modal-title').textContent = product.name;
+  document.getElementById('modal-desc').textContent = product.desc;
+
+  // Image
+  const imgContainer = document.getElementById('modal-img');
+  imgContainer.innerHTML = product.img
+    ? `<img src="${product.img}" alt="${product.name}">`
+    : `<div class="placeholder" style="width:120px;height:120px;font-size:14px;">Add Image</div>`;
+
+  // Features
+  const featuresHtml = product.features.map(f => `<span class="modal-feature">${f}</span>`).join('');
+  document.getElementById('modal-features').innerHTML = featuresHtml;
+
+  // Specs
+  let specsHtml = '';
+  for (const [key, val] of Object.entries(product.specs)) {
+    if (key.endsWith('_')) continue;
+    specsHtml += `<div class="spec-row"><span class="spec-key">${key}</span><span class="spec-val">${val}</span></div>`;
+  }
+  document.getElementById('modal-specs-body').innerHTML = specsHtml;
+
+  // Update enquiry links with product name
+  const encodedName = encodeURIComponent(`Enquiry for ${product.name} (${product.brand})`);
+  document.getElementById('modal-email').href = `mailto:info@supersonicgroup.in?subject=${encodedName}`;
+  document.getElementById('modal-wa').href = `https://wa.me/916353767128?text=${encodedName}`;
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Close on ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== SCROLL ANIMATIONS =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+function initObserver() {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ===== NAVBAR SCROLL EFFECT =====
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const scrollPos = window.scrollY + 100;
+  sections.forEach(section => {
+    const link = document.querySelector(`.nav-links a[href="#${section.id}"]`);
+    if (link) {
+      link.classList.toggle('active',
+        scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight);
+    }
+  });
+});
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderSections();
+  setTimeout(initObserver, 100);
+});
+</script>
+</body>
+</html>

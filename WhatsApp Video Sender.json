@@ -1,0 +1,401 @@
+{
+  "name": "WhatsApp Video Sender - Google Sheet",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Run Workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        400,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "config-1",
+              "name": "video_url",
+              "value": "https://drive.google.com/uc?id=1CwnOXz5hiYM95KZHixQ9Sv2W2uUCOirH&export=download",
+              "type": "string"
+            },
+            {
+              "id": "config-2",
+              "name": "phone_number_id",
+              "value": "978006945387748",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "⚙️ Video Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.video_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0011-4000-8000-000000000011",
+      "name": "Download Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        840,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('⚙️ Video Config').first().json.phone_number_id }}/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "type",
+              "value": "video/mp4"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "name": "Upload Video to WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1060,
+        400
+      ],
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "NyMn3oqFPqaxFlIF",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "media-id-1",
+              "name": "media_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "media-id-2",
+              "name": "phone_number_id",
+              "value": "={{ $('⚙️ Video Config').first().json.phone_number_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0010-4000-8000-000000000010",
+      "name": "Save Media ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo",
+          "mode": "list",
+          "cachedResultName": "Scan Card detail",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "Read Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1500,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1qALO6Gy1muJfQJk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect unique WhatsApp numbers from each row\nconst items = $input.all();\nconst mediaId = $('Save Media ID').first().json.media_id;\nconst phoneNumberId = $('Save Media ID').first().json.phone_number_id;\nconst results = [];\nconst sentNumbers = new Set();\n\nfor (const item of items) {\n  const phoneNumber = (item.json['Phone Number'] || '').toString().trim().replace(/[\\s\\-()]/g, '');\n  const mobileNumber = (item.json['Mobile Number'] || '').toString().trim().replace(/[\\s\\-()]/g, '');\n  const customerName = item.json['Customer Name'] || '';\n  const companyName = item.json['Company Name'] || '';\n\n  if (phoneNumber && phoneNumber.length >= 10 && !sentNumbers.has(phoneNumber)) {\n    sentNumbers.add(phoneNumber);\n    results.push({\n      json: {\n        to_number: phoneNumber,\n        customer_name: customerName,\n        company_name: companyName,\n        media_id: mediaId,\n        phone_number_id: phoneNumberId,\n        source: 'Phone Number'\n      }\n    });\n  }\n\n  if (mobileNumber && mobileNumber.length >= 10 && !sentNumbers.has(mobileNumber)) {\n    sentNumbers.add(mobileNumber);\n    results.push({\n      json: {\n        to_number: mobileNumber,\n        customer_name: customerName,\n        company_name: companyName,\n        media_id: mediaId,\n        phone_number_id: phoneNumberId,\n        source: 'Mobile Number'\n      }\n    });\n  }\n}\n\nreturn results;"
+      },
+      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Collect Unique Numbers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.phone_number_id }}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ \"messaging_product\": \"whatsapp\", \"to\": $json.to_number, \"type\": \"template\", \"template\": { \"name\": \"video_share\", \"language\": { \"code\": \"en\" }, \"components\": [ { \"type\": \"header\", \"parameters\": [ { \"type\": \"video\", \"video\": { \"id\": $json.media_id } } ] } ] } }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 2000
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Send video_share Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1940,
+        400
+      ],
+      "continueOnFail": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "NyMn3oqFPqaxFlIF",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "check-success",
+              "leftValue": "={{ $json.messages }}",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "Message Sent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log ALL successful sends\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const input = items[i].json;\n  results.push({\n    json: {\n      status: '✅ Video Sent Successfully',\n      message_id: input.messages ? input.messages[0].id : 'unknown',\n      number: input.contacts ? input.contacts[0].input : 'unknown',\n      wa_id: input.contacts ? input.contacts[0].wa_id : 'unknown'\n    }\n  });\n}\n\nreturn results;"
+      },
+      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2380,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log ALL failed sends\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const input = items[i].json;\n  results.push({\n    json: {\n      status: '❌ Video Send Failed',\n      error: input.error ? input.error.message : JSON.stringify(input)\n    }\n  });\n}\n\nreturn results;"
+      },
+      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "name": "Log Failed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2380,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Run Workflow": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Video Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Video Config": {
+      "main": [
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Upload Video to WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video to WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Save Media ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Media ID": {
+      "main": [
+        [
+          {
+            "node": "Read Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Collect Unique Numbers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Unique Numbers": {
+      "main": [
+        [
+          {
+            "node": "Send video_share Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send video_share Template": {
+      "main": [
+        [
+          {
+            "node": "Message Sent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Sent?": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-24T00:00:00.000Z",
+  "versionId": "3"
+}

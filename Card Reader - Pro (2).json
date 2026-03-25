@@ -1,0 +1,1209 @@
+{
+  "name": "Card Reader - Pro",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "card-scanner-api",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "id": "c97cd9a6-b5f7-4c66-993f-ae6092db0b7a",
+      "name": "PWA Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        832,
+        1696
+      ],
+      "webhookId": "card-scanner-api-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse PWA FormData into workflow format\n// PWA sends: Business Card Image (file), Business Card Back Side (Optional) (file),\n// Voice Note (file), Sales Person Name, Remark, Event Name, Quick Notes\n\nconst inputItem = $input.first();\nconst json = inputItem.json;\nconst binary = inputItem.binary || {};\nconst items = [];\n\n// Extract form fields from PWA\nconst sales_person_name = json['Sales Person Name'] || json.salesPerson || '';\nconst remark = json['Remark'] || json.remark || '';\nconst event_name = json['Event Name'] || json.eventName || '';\nconst quick_notes = json['Quick Notes'] || json.quickNotes || '';\n\n// Find images and voice note from binary data\nconst frontImages = {};\nconst backImages = {};\nlet voiceNote = null;\nlet frontIdx = 0;\nlet backIdx = 0;\n\nfor (const key of Object.keys(binary)) {\n  const k = key.toLowerCase();\n  if (k.includes('business_card_image') || k.includes('business card image') || (k.includes('front') && !k.includes('back'))) {\n    frontImages[String(frontIdx)] = binary[key];\n    frontIdx++;\n  } else if (k.includes('back') || k.includes('business_card_back')) {\n    backImages[String(backIdx)] = binary[key];\n    backIdx++;\n  } else if (k.includes('voice') || k.includes('audio')) {\n    voiceNote = binary[key];\n  }\n}\n\n// If no categorized images found, try generic binary keys\nif (frontIdx === 0) {\n  for (const key of Object.keys(binary)) {\n    if (!key.toLowerCase().includes('voice') && !key.toLowerCase().includes('audio')) {\n      frontImages[String(frontIdx)] = binary[key];\n      frontIdx++;\n    }\n  }\n}\n\nfor (const index of Object.keys(frontImages)) {\n  const item = {\n    json: {\n      sales_person_name: sales_person_name,\n      remark: remark,\n      event_name: event_name,\n      quick_notes: quick_notes,\n      has_voice_note: voiceNote ? true : false\n    },\n    binary: {\n      Business_Card_Image: frontImages[index]\n    }\n  };\n  if (backImages[index]) {\n    item.binary.Business_Card_Back_Side = backImages[index];\n  }\n  if (voiceNote && index === '0') {\n    item.binary.Voice_Note = voiceNote;\n  }\n  items.push(item);\n}\n\nif (items.length === 0) {\n  return [{ json: { sales_person_name, remark, event_name, quick_notes, has_voice_note: false }, binary }];\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        1696
+      ],
+      "id": "7b870e22-fc9c-4305-9834-bbf1940cebb7",
+      "name": "Parse PWA Data",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, company_name: $json.company_name || '', full_name: $json.full_name || '', job_title: $json.job_title || '', phone_number: $json.phone_number || '', mobile_number: $json.mobile_number || '', email: $json.email || '', website: $json.website || '', address: $json.address || '', products: $json.products || '', other_details: $json.other_details || '' }) }}",
+        "options": {}
+      },
+      "id": "d3a0386c-d5ea-4927-af89-2ed72b698e54",
+      "name": "Respond to PWA",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2624,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "Super Sonic - Business Card Scanner",
+        "formDescription": "Upload business card images and voice notes to capture lead details automatically",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Business Card Image",
+              "fieldType": "file",
+              "acceptFileTypes": "image/*",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Business Card Back Side (Optional)",
+              "fieldType": "file",
+              "acceptFileTypes": "image/*"
+            },
+            {
+              "fieldLabel": "Voice Note (Optional)",
+              "fieldType": "file",
+              "acceptFileTypes": "audio/*"
+            },
+            {
+              "fieldLabel": "Sales Person Name",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Dharmesh"
+                  },
+                  {
+                    "option": "Pankanj"
+                  },
+                  {
+                    "option": "Smit"
+                  },
+                  {
+                    "option": "Tejash"
+                  },
+                  {
+                    "option": "Vihang"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Remark",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "High"
+                  },
+                  {
+                    "option": "Medium"
+                  },
+                  {
+                    "option": "Low"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Event Name",
+              "placeholder": "e.g., IMTEX 2026 Bangalore"
+            },
+            {
+              "fieldLabel": "Quick Notes",
+              "fieldType": "textarea",
+              "placeholder": "Any additional notes about this lead..."
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "7f9a1009-7bd1-44d9-ad3c-b32de44c7e9f",
+      "name": "Upload Business Card",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        1984
+      ],
+      "webhookId": "2ee5a417-4454-4e6f-8888-c978b79017f2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split multiple card uploads into individual items\n// Also handle voice notes and extra form fields\n\nconst inputItem = $input.first();\nconst json = inputItem.json;\nconst binary = inputItem.binary || {};\nconst items = [];\n\n// Extract form fields\nconst sales_person_name = json['Sales Person Name'] || '';\nconst remark = json.Remark || '';\nconst event_name = json['Event Name'] || '';\nconst quick_notes = json['Quick Notes'] || '';\n\n// Separate front images, back images, and voice notes\nconst frontImages = {};\nconst backImages = {};\nlet voiceNote = null;\n\nfor (const key of Object.keys(binary)) {\n  if (key.startsWith('Business_Card_Image_')) {\n    const index = key.replace('Business_Card_Image_', '');\n    frontImages[index] = binary[key];\n  } else if (key.startsWith('Business_Card_Back_Side_Optional_')) {\n    const index = key.replace('Business_Card_Back_Side_Optional_', '');\n    backImages[index] = binary[key];\n  } else if (key.startsWith('Voice_Note_Optional_') || key.startsWith('Voice_Note_')) {\n    voiceNote = binary[key];\n  }\n}\n\n// Process each front image and match with corresponding back image\nfor (const index of Object.keys(frontImages)) {\n  const item = {\n    json: {\n      sales_person_name: sales_person_name,\n      remark: remark,\n      event_name: event_name,\n      quick_notes: quick_notes,\n      has_voice_note: voiceNote ? true : false\n    },\n    binary: {\n      Business_Card_Image: frontImages[index]\n    }\n  };\n  \n  // Add back side image if exists for this index\n  if (backImages[index]) {\n    item.binary.Business_Card_Back_Side = backImages[index];\n  }\n  \n  // Add voice note to first card item only\n  if (voiceNote && index === Object.keys(frontImages)[0]) {\n    item.binary.Voice_Note = voiceNote;\n  }\n  \n  items.push(item);\n}\n\nif (items.length === 0) {\n  return [inputItem];\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        1984
+      ],
+      "id": "7556fb9c-5786-4d2b-9e8c-09154b2a8f8d",
+      "name": "Split Cards & Extract Voice",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "sales_person_name",
+              "value": "={{ $json.sales_person_name }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "remark",
+              "value": "={{ $json.remark }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "event_name",
+              "value": "={{ $json.event_name }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "quick_notes",
+              "value": "={{ $json.quick_notes }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "has_voice_note",
+              "value": "={{ $json.has_voice_note }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "399f2520-aea2-41c8-9c5d-77774cab8945",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "sales_person_name",
+              "value": "={{ $json.sales_person_name }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "remark",
+              "value": "={{ $json.remark }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "event_name",
+              "value": "={{ $json.event_name }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "quick_notes",
+              "value": "={{ $json.quick_notes }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "has_voice_note",
+              "value": "={{ $json.has_voice_note }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d4451edd-141a-4ba5-849d-5c3af90f1939",
+      "name": "Prepare Card Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract all contact information AND any additional details from the business card image(s). If multiple images are provided (front and back), extract and combine information from all images.\nExtract these fields:\n- company_name\n- full_name\n- job_title\n- phone_number\n- mobile_number\n- email\n- website\n- address\n- products \n- other_details (for certifications, taglines, social media handles, QR codes, or any other miscellaneous text from front or back side)\nRules:\n1. If the card mentions products, services (e.g., logistics, transportation), or manufacturing details, extract them into the \"products\" field even if company name implies it.\n2. Any other remaining information (like certifications, taglines, etc.) should go into \"other_details\"\n3. If a field is not present on the card, return null for that field\n4. Return valid JSON only, no additional text\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a business card OCR expert. Extract ALL information from the business card image(s).\n\nExtract these fields with STRICT separation:\n\n1. **company_name**: Company/business name only\n2. **full_name**: Person's full name\n3. **job_title**: Person's job title/position\n4. **phone_number**: Landline/office phone\n5. **mobile_number**: Mobile phone number(s)\n6. **email**: Email address\n7. **website**: Website URL\n8. **address**: Complete physical address\n9. **products**: Extract ONLY products, services, or items manufactured/sold. List them as comma-separated or array format.\n10. **other_details**: Extract ONLY non-product information like GSTIN number, certifications, taglines (e.g., \"Quality Your Success\"), establishment year, social media handles, QR codes, etc. Do NOT include products here.\n\nCRITICAL RULES:\n- Separate products from other_details clearly\n- Products = things the company sells/manufactures\n- Other_details = registrations, certifications, mottos, codes\n- Return valid JSON only, no additional text\n- If field not present, return null",
+          "passthroughBinaryImages": true
+        }
+      },
+      "id": "76e61ccf-4f24-443e-800b-8d84621cb390",
+      "name": "Extract Card Details",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1728,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        2176
+      ],
+      "id": "ca56867e-327c-4cd8-bdf6-6e44e17ea2c4",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "Ln9SIZ0CgbRYzJ5d",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"company_name\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"full_name\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"job_title\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"phone_number\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"mobile_number\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"email\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"website\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"address\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"products\": {\n\t\t\t\"type\": \"string\",\n\t\t\t\"description\": \"Products, services, or items manufactured/sold by the company. Extract all product names, tools, equipment, or services mentioned on the card. Examples: Air Pneumatic Tools, Solenoid Valves, Air Cylinders, Compressors, etc.\"\n\t\t},\n\t\t\"other_details\": {\n\t\t\t\"type\": \"string\",\n\t\t\t\"description\": \"Other miscellaneous information like GSTIN, certifications, taglines, establishment year, social media handles, QR codes, or any other non-product text\"\n\t\t}\n\t},\n\t\"required\": []\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1808,
+        1968
+      ],
+      "id": "af9a0f26-e8b5-4434-a2e8-5320e61af502",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.output.full_name }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json.output.company_name }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "528fbb6a-0632-404d-af24-d65b171d9680",
+      "name": "Check Extraction Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2176,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "Failed to extract data from business card. Please ensure the image is clear and contains readable text."
+      },
+      "id": "e6610390-79f3-4b52-85c7-ac55467f6d1a",
+      "name": "Extraction Failed",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process extracted card data + voice note transcription\nconst items = $input.all();\nconst processedItems = [];\n\n// Function to clean phone numbers\nconst cleanNumbers = (val) => {\n  if (!val) return '';\n  return String(val)\n    .replace(/[^0-9,+\\s-]/g, '')\n    .replace(/\\+91/g, '')\n    .replace(/[\\s-]/g, '')\n    .replace(/,+/g, ',')\n    .split(',')\n    .map(n => n.trim())\n    .filter(n => n.length >= 5 && n.length <= 15)\n    .join(', ');\n};\n\nfor (const item of items) {\n  const output = item.json.output || item.json;\n  \n  if (output.phone_number) {\n    output.phone_number = cleanNumbers(output.phone_number);\n  }\n  if (output.mobile_number) {\n    output.mobile_number = cleanNumbers(output.mobile_number);\n  }\n  \n  // Get voice note transcription\n  let voice_note_text = '';\n  try {\n    const voiceNode = $('Transcribe Voice Note');\n    if (voiceNode && voiceNode.first()) {\n      voice_note_text = voiceNode.first().json.text || voiceNode.first().json.transcription || '';\n    }\n  } catch (e) {}\n  \n  // Get form data - try BOTH paths\n  let sales_person_name = '', remark = '', event_name = '', quick_notes = '';\n  try {\n    // Try PWA Webhook path first (Parse PWA Data)\n    const pwaData = $('Parse PWA Data').first().json;\n    sales_person_name = pwaData.sales_person_name || '';\n    remark = pwaData.remark || '';\n    event_name = pwaData.event_name || '';\n    quick_notes = pwaData.quick_notes || '';\n  } catch (e) {\n    try {\n      // Fallback to Form trigger path (Split Cards & Extract Voice)\n      const formData = $('Split Cards & Extract Voice').first().json;\n      sales_person_name = formData.sales_person_name || '';\n      remark = formData.remark || '';\n      event_name = formData.event_name || '';\n      quick_notes = formData.quick_notes || '';\n    } catch (e2) {}\n  }\n  \n  const record = {\n    company_name: output.company_name || '',\n    full_name: output.full_name || '',\n    job_title: output.job_title || '',\n    phone_number: output.phone_number || '',\n    mobile_number: output.mobile_number || '',\n    email: output.email || '',\n    website: output.website || '',\n    address: output.address || '',\n    products: output.products || '',\n    other_details: output.other_details || '',\n    sales_person_name: sales_person_name,\n    remark: remark,\n    event_name: event_name,\n    quick_notes: quick_notes,\n    voice_note: voice_note_text\n  };\n  \n  processedItems.push({ json: record });\n}\n\nreturn processedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        1840
+      ],
+      "id": "c8f97bcc-977d-4482-bef6-a1c6360f920f",
+      "name": "Process & Clean Data"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo",
+          "mode": "list",
+          "cachedResultName": "Scan Card detail",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnWy8_0M_s6bDqQPWvix334EFW0pzueVwquGMmrafJo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.toFormat('dd-MM-yyyy hh:mm a') }}",
+            "Company Name": "={{ $json.company_name }}",
+            "Customer Name": "={{ $json.full_name }}",
+            "Phone Number": "={{ $json.phone_number }}",
+            "Mobile Number": "={{ $json.mobile_number }}",
+            "Email Address": "={{ $json.email }}",
+            "Physical Address": "={{ $json.address }}",
+            "Website": "={{ $json.website }}",
+            "Producat": "={{ $json.products }}",
+            "other": "={{ $json.other_details }}",
+            "Sales Persone ": "={{ $json.sales_person_name }}",
+            "Remark": "={{ $json.remark }}",
+            "Event": "={{ $json.event_name }}",
+            "Quick Notes": "={{ $json.quick_notes }}",
+            "Voice Note": "={{ $json.voice_note }}"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Name",
+              "displayName": "Customer Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile Number",
+              "displayName": "Mobile Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Physical Address",
+              "displayName": "Physical Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sales Persone ",
+              "displayName": "Sales Persone ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Remark",
+              "displayName": "Remark",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Producat",
+              "displayName": "Producat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other",
+              "displayName": "other",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sent Time",
+              "displayName": "Sent Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Event",
+              "displayName": "Event",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Quick Notes",
+              "displayName": "Quick Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Voice Note",
+              "displayName": "Voice Note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "40ddcd50-757a-4a5d-b750-23db419ed65d",
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2624,
+        1936
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1qALO6Gy1muJfQJk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "phone_number",
+              "value": "={{ $json['Phone Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "mobile_number",
+              "value": "={{ $json['Mobile Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "email",
+              "value": "={{ $json['Email Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "customer_name",
+              "value": "={{ $json['Customer Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "company_name",
+              "value": "={{ $json['Company Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-6",
+              "name": "event_name",
+              "value": "={{ $json['Event'] || 'IMTEX 2026 Bangalore' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7102eeaf-ac73-4bba-a466-2b9ab4744e77",
+      "name": "Prepare WhatsApp Check Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2848,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/978006945387748/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "EAAVvr9GvWhYBQM7eVsbG1pxwoYdAQevI8W9gPZAtDzhTErRsvgtNc5IiXbI3qKjVgTAcZC828kDtw3ZAZBP1phL2dTQKAVTFH4V2fMzoIFMTbmETrRSOA3V5Ao1JYIxcHE5kpjsx6Kno9Oxmrus3JNf9nQcAWM3cfC4H30VZBqWUryErnDpdZCPi94VupiaQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"messaging_product\": \"whatsapp\", \"to\": $json.phone_number, \"type\": \"text\", \"text\": { \"body\": \"Test\" } } }}",
+        "options": {}
+      },
+      "id": "af83f253-afe0-4640-8988-578742825905",
+      "name": "Check WhatsApp on Phone Number",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3072,
+        1840
+      ],
+      "continueOnFail": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "NyMn3oqFPqaxFlIF",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $('Check WhatsApp on Phone Number').item.json.contacts[0].wa_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3102329d-4030-464b-b1a4-1175508c2fe8",
+      "name": "Check Phone Number Has WhatsApp",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3296,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/978006945387748/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "EAAVvr9GvWhYBQM7eVsbG1pxwoYdAQevI8W9gPZAtDzhTErRsvgtNc5IiXbI3qKjVgTAcZC828kDtw3ZAZBP1phL2dTQKAVTFH4V2fMzoIFMTbmETrRSOA3V5Ao1JYIxcHE5kpjsx6Kno9Oxmrus3JNf9nQcAWM3cfC4H30VZBqWUryErnDpdZCPi94VupiaQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"messaging_product\": \"whatsapp\", \"to\": $json.mobile_number, \"type\": \"text\", \"text\": { \"body\": \"Test\" } } }}",
+        "options": {}
+      },
+      "id": "5961e28d-ad0f-4815-b179-8293c65e06b9",
+      "name": "Check WhatsApp on Mobile Number",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3520,
+        1744
+      ],
+      "continueOnFail": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "NyMn3oqFPqaxFlIF",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $('Check WhatsApp on Mobile Number').item.json.contacts[0].wa_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cf912fd1-3cc0-4f59-a49c-5e77bacd13a2",
+      "name": "Check Mobile Number Has WhatsApp",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3744,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "978006945387748",
+        "recipientPhoneNumber": "={{ $('Prepare WhatsApp Check Data').item.json.phone_number }}",
+        "template": "thank_you|en_US",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Prepare WhatsApp Check Data').item.json.event_name || 'IMTEX 2026 Bangalore Exhibition' }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "dcc14537-74ae-417b-b415-a2cd77a0f46a",
+      "name": "Send WhatsApp to Phone Number",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        3520,
+        1936
+      ],
+      "continueOnFail": true,
+      "webhookId": "c4942387-ff1f-4509-84f6-3941799cb89e",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "wtBjlpc6p6GoCouL",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "978006945387748",
+        "recipientPhoneNumber": "={{ $('Prepare WhatsApp Check Data').item.json.mobile_number }}",
+        "template": "thank_you|en_US",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Prepare WhatsApp Check Data').item.json.event_name || 'IMTEX 2026 Bangalore Exhibition' }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "7a0884f7-2d5e-4a81-b624-d553f9d44e89",
+      "name": "Send WhatsApp to Mobile Number",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        3968,
+        1744
+      ],
+      "webhookId": "c8461a86-351f-4bba-b7b7-2c9d491dc03c",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "wtBjlpc6p6GoCouL",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email Address'] }}",
+        "subject": "=Thank you for visiting SUPER SONIC at {{ $json['Event'] || 'IMTEX 2026 Bangalore Exhibition' }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        * { margin: 0; padding: 0; box-sizing: border-box; }\n        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2c3e50; background: #f4f7fa; }\n        .email-wrapper { max-width: 650px; margin: 30px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }\n        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%); color: white; padding: 40px 30px; text-align: center; position: relative; }\n        .header::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: white; border-radius: 50% 50% 0 0; }\n        .header h1 { font-size: 28px; margin-bottom: 10px; font-weight: 600; }\n        .header p { font-size: 16px; opacity: 0.9; }\n        .content { padding: 40px 35px; background: white; }\n        .greeting { font-size: 18px; color: #1e3c72; margin-bottom: 20px; }\n        .main-text { font-size: 15px; color: #555; margin-bottom: 20px; line-height: 1.8; }\n        .highlight-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #2196F3; margin: 25px 0; box-shadow: 0 4px 15px rgba(33,150,243,0.1); }\n        .highlight-box h3 { color: #1976D2; font-size: 18px; margin-bottom: 12px; font-weight: 600; }\n        .highlight-box p { color: #424242; font-size: 15px; line-height: 1.7; }\n        .cta-section { text-align: center; margin: 35px 0; padding: 20px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; }\n        .cta-button { display: inline-block; background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%); color: #ffffff !important; padding: 18px 45px; text-decoration: none; border-radius: 50px; font-size: 17px; font-weight: 700; box-shadow: 0 8px 24px rgba(13,71,161,0.45); letter-spacing: 0.5px; border: none; }\n        .company-highlight { background: #f8f9fa; padding: 25px; border-radius: 12px; margin: 30px 0; text-align: center; border: 2px dashed #90caf9; }\n        .company-name { color: #1565c0; font-size: 22px; font-weight: 700; margin-top: 10px; }\n        .signature { margin-top: 35px; padding-top: 25px; border-top: 2px solid #e3f2fd; }\n        .signature p { margin: 5px 0; color: #555; }\n        .signature-name { color: #1565c0; font-weight: 600; font-size: 17px; }\n        .footer { background: linear-gradient(135deg, #263238 0%, #37474f 100%); color: white; padding: 40px 30px; text-align: center; }\n        .footer-company { font-size: 24px; font-weight: 600; margin-bottom: 30px; color: #90caf9; letter-spacing: 0.5px; }\n        .contact-info { background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; margin: 20px 0; }\n        .contact-row { display: block; margin: 12px 0; font-size: 15px; line-height: 1.8; }\n        .contact-row a { color: #90caf9; text-decoration: none; font-weight: 500; }\n        .divider-footer { height: 1px; background: rgba(255,255,255,0.2); margin: 25px 0; }\n        .address { margin-top: 20px; font-size: 14px; line-height: 1.9; color: #cfd8dc; }\n        .divider { height: 3px; background: linear-gradient(90deg, #1565c0 0%, #0d47a1 100%); margin: 30px 0; border-radius: 2px; }\n    </style>\n</head>\n<body>\n    <div class=\"email-wrapper\">\n        <div class=\"header\">\n            <h1>Thank You for Visiting Us!</h1>\n            <p>{{ $json['Event'] || 'IMTEX 2026 Bangalore Exhibition' }}</p>\n        </div>\n        <div class=\"content\">\n            <p class=\"greeting\">Dear <strong>{{ $json['Customer Name'] }}</strong>,</p>\n            <p class=\"main-text\">\n                Thank you for visiting <strong>SUPER SONIC</strong> at <strong>{{ $json['Event'] || 'IMTEX 2026 Bangalore Exhibition' }}</strong>. It was a pleasure connecting with you and understanding your requirements.\n            </p>\n            <div class=\"highlight-box\">\n                <h3>About SUPER SONIC</h3>\n                <p>\n                    SUPER SONIC is a trusted name in <strong>Automation &amp; Laser Machinery</strong>, delivering precision-engineered industrial parts and cutting-edge solutions. We partner with leading global manufacturers to bring you the best in quality and innovation.\n                </p>\n            </div>\n            <p class=\"main-text\">\n                Whether you need technical specifications, quotations, or expert guidance on the right solution for your application, our team is ready to assist you. Feel free to reach out anytime.\n            </p>\n            <div class=\"cta-section\">\n                <a href=\"https://drive.google.com/file/d/1_lnWuujBS3mtebUgqVNhS_ihSj9D3lBX/view?usp=drive_link\" class=\"cta-button\" style=\"color: #ffffff !important; text-decoration: none;\">View Our Product Catalogue</a>\n            </div>\n            <div class=\"divider\"></div>\n            <div class=\"company-highlight\">\n                <p style=\"margin-bottom: 10px; color: #666; font-size: 16px;\">We look forward to a successful partnership with</p>\n                <p class=\"company-name\">{{ $json['Company Name'] }}</p>\n            </div>\n            <div class=\"signature\">\n                <p style=\"font-size: 16px;\">Warm Regards,</p>\n                <p class=\"signature-name\">{{ $json['Sales Persone '] }}</p>\n                <p style=\"color: #1565c0; font-weight: 500; font-size: 15px;\">Super Sonic Industry Private Limited</p>\n            </div>\n        </div>\n        <div class=\"footer\">\n            <div class=\"footer-company\">Super Sonic Industry Private Limited</div>\n            <div class=\"contact-info\">\n                <div class=\"contact-row\">Email: <a href=\"mailto:enquiry@supersonicgroup.in\">enquiry@supersonicgroup.in</a></div>\n                <div class=\"contact-row\">Mobile: <a href=\"tel:+916353767128\">+91 6353767128</a></div>\n                <div class=\"contact-row\">Website: <a href=\"https://supersonicgroup.in\" target=\"_blank\">supersonicgroup.in</a></div>\n            </div>\n            <div class=\"divider-footer\"></div>\n            <div class=\"address\">\n                Plot No. C-10/5-6, Soma Kanji Estate-2, SK-2,<br>\n                Near Sosyo Circle, Opposite Sanidev Temple,<br>\n                Udhna Magdalla Road, Surat - 395002,<br>\n                Gujarat, India\n            </div>\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2848,
+        2032
+      ],
+      "id": "79b8852f-70b7-4b33-9fc9-96e737ab41c1",
+      "name": "Send Email",
+      "webhookId": "83b9b33f-9987-41d6-a14c-c67bf6408a01",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GiE3Sanf0vLhIpGh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.has_voice_note }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e5a55f55-a17e-492c-a456-0ef5bed16be3",
+      "name": "Has Voice Note?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1280,
+        1936
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $credentials.httpBearerAuth.token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "whisper-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "Voice_Note"
+            },
+            {
+              "name": "language",
+              "value": "hi"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "51a75211-1196-4b49-9a65-70702bf6342a",
+      "name": "Transcribe Voice Note",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1504,
+        1936
+      ],
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "NyMn3oqFPqaxFlIF",
+          "name": "Bearer Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "PWA Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse PWA Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse PWA Data": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Has Voice Note?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Business Card": {
+      "main": [
+        [
+          {
+            "node": "Split Cards & Extract Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Cards & Extract Voice": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Has Voice Note?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Prepare Card Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Card Data": {
+      "main": [
+        [
+          {
+            "node": "Extract Card Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Card Details": {
+      "main": [
+        [
+          {
+            "node": "Check Extraction Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Card Details",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Extract Card Details",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Extraction Success": {
+      "main": [
+        [
+          {
+            "node": "Process & Clean Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraction Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process & Clean Data": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to PWA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Prepare WhatsApp Check Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare WhatsApp Check Data": {
+      "main": [
+        [
+          {
+            "node": "Check WhatsApp on Phone Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check WhatsApp on Phone Number": {
+      "main": [
+        [
+          {
+            "node": "Check Phone Number Has WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Phone Number Has WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp to Phone Number",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check WhatsApp on Mobile Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check WhatsApp on Mobile Number": {
+      "main": [
+        [
+          {
+            "node": "Check Mobile Number Has WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Mobile Number Has WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp to Mobile Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Voice Note?": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Voice Note",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "1a3b5731-3885-421f-a950-111c48e3be2f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9e8f2c5f0f3e960328ec53c3ed751e6a324296b86f2018da754bf0707e092748"
+  },
+  "id": "vLvdZ5E6H2p1c7Hw",
+  "tags": []
+}
