@@ -148,6 +148,9 @@
         }
         .login-btn:active{transform:scale(0.97);box-shadow:var(--shadow-in)}
         .login-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+        .login-switch{margin-top:16px;font-size:12px;color:var(--text3)}
+        .login-switch a{color:var(--accent2);text-decoration:none;font-weight:700}
+        .login-switch a:hover{text-decoration:underline}
         /* Hide app until login */
         body.not-logged-in .header,
         body.not-logged-in .page,
@@ -591,7 +594,8 @@
 
 <!-- LOGIN SCREEN -->
 <div class="login-overlay" id="loginScreen">
-    <div class="login-box">
+    <!-- LOGIN FORM -->
+    <div class="login-box" id="loginBox">
         <div class="login-logo">SS</div>
         <div class="login-title">Super Sonic</div>
         <div class="login-sub">Card Scanner Pro &mdash; Login to continue</div>
@@ -604,7 +608,37 @@
             <input type="password" id="loginPass" placeholder="Enter password" autocomplete="current-password">
         </div>
         <div class="login-err" id="loginErr"></div>
-        <button class="login-btn" id="loginBtn" onclick="doLogin()">Login</button>
+        <button class="login-btn" onclick="doLogin()">Login</button>
+        <div class="login-switch">New here? <a href="#" onclick="showSignup();return false">Create Account</a></div>
+    </div>
+    <!-- SIGNUP FORM -->
+    <div class="login-box" id="signupBox" style="display:none">
+        <div class="login-logo">SS</div>
+        <div class="login-title">Create Account</div>
+        <div class="login-sub">Register to start scanning cards</div>
+        <div class="login-fg">
+            <label>Full Name <span style="color:var(--red)">*</span></label>
+            <input type="text" id="signupName" placeholder="e.g. Rahul Sharma" autocomplete="name">
+        </div>
+        <div class="login-fg">
+            <label>Email <span style="color:var(--red)">*</span></label>
+            <input type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="login-fg">
+            <label>Phone Number</label>
+            <input type="tel" id="signupPhone" placeholder="e.g. 9876543210" autocomplete="tel">
+        </div>
+        <div class="login-fg">
+            <label>Password <span style="color:var(--red)">*</span></label>
+            <input type="password" id="signupPass" placeholder="Min 4 characters" autocomplete="new-password">
+        </div>
+        <div class="login-fg">
+            <label>Confirm Password <span style="color:var(--red)">*</span></label>
+            <input type="password" id="signupPass2" placeholder="Re-enter password">
+        </div>
+        <div class="login-err" id="signupErr"></div>
+        <button class="login-btn" onclick="doSignup()">Create Account</button>
+        <div class="login-switch">Already have an account? <a href="#" onclick="showLogin();return false">Login</a></div>
     </div>
 </div>
 
@@ -879,7 +913,23 @@ const USERS=[
     {email:'admin@supersonicgroup.in',password:'admin@ss2026',name:'Admin',role:'admin'},
 ];
 
-// ============ LOGIN ============
+// ============ LOGIN / SIGNUP ============
+function getLocalUsers(){
+    try{return JSON.parse(localStorage.getItem('ss_registered_users')||'[]')}catch(e){return[]}
+}
+function saveLocalUsers(users){localStorage.setItem('ss_registered_users',JSON.stringify(users))}
+function findUser(email,pass){
+    // Check hardcoded users first, then registered users
+    const hardcoded=USERS.find(u=>u.email.toLowerCase()===email && u.password===pass);
+    if(hardcoded)return hardcoded;
+    const locals=getLocalUsers();
+    return locals.find(u=>u.email.toLowerCase()===email && u.password===pass);
+}
+function emailExists(email){
+    if(USERS.find(u=>u.email.toLowerCase()===email))return true;
+    return getLocalUsers().find(u=>u.email.toLowerCase()===email);
+}
+
 function checkLogin(){
     const saved=localStorage.getItem('ss_user');
     if(saved){
@@ -897,11 +947,45 @@ function doLogin(){
     const pass=document.getElementById('loginPass').value;
     const errEl=document.getElementById('loginErr');
     if(!email||!pass){errEl.textContent='Please enter email and password';return}
-    const user=USERS.find(u=>u.email.toLowerCase()===email && u.password===pass);
+    const user=findUser(email,pass);
     if(!user){errEl.textContent='Invalid email or password';return}
     currentUser={email:user.email,name:user.name,role:user.role};
     localStorage.setItem('ss_user',JSON.stringify(currentUser));
     applyLogin();
+}
+function doSignup(){
+    const name=document.getElementById('signupName').value.trim();
+    const email=document.getElementById('signupEmail').value.trim().toLowerCase();
+    const phone=document.getElementById('signupPhone').value.trim();
+    const pass=document.getElementById('signupPass').value;
+    const pass2=document.getElementById('signupPass2').value;
+    const errEl=document.getElementById('signupErr');
+    errEl.textContent='';
+    if(!name){errEl.textContent='Please enter your full name';return}
+    if(!email){errEl.textContent='Please enter your email';return}
+    if(!pass||pass.length<4){errEl.textContent='Password must be at least 4 characters';return}
+    if(pass!==pass2){errEl.textContent='Passwords do not match';return}
+    if(emailExists(email)){errEl.textContent='This email is already registered. Please login.';return}
+    // Save new user
+    const locals=getLocalUsers();
+    const newUser={email:email,password:pass,name:name,phone:phone,role:'sales',registeredAt:new Date().toISOString()};
+    locals.push(newUser);
+    saveLocalUsers(locals);
+    // Auto-login
+    currentUser={email:newUser.email,name:newUser.name,role:newUser.role};
+    localStorage.setItem('ss_user',JSON.stringify(currentUser));
+    applyLogin();
+    toast('Account created!','&#9989;');
+}
+function showSignup(){
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('signupBox').style.display='';
+    document.getElementById('loginErr').textContent='';
+}
+function showLogin(){
+    document.getElementById('signupBox').style.display='none';
+    document.getElementById('loginBox').style.display='';
+    document.getElementById('signupErr').textContent='';
 }
 function applyLogin(){
     document.getElementById('loginScreen').classList.add('hidden');
@@ -911,7 +995,6 @@ function applyLogin(){
     // Hide export for non-admin
     const exportBtn=document.getElementById('exportBtn');
     if(exportBtn){exportBtn.style.display=currentUser.role==='admin'?'':'none'}
-    // Hide individual card export buttons for non-admin
     document.querySelectorAll('.mfooter .btn').forEach(b=>{
         if(b.textContent.includes('Excel'))b.style.display=currentUser.role==='admin'?'':'none';
     });
@@ -922,9 +1005,10 @@ function doLogout(){
     currentUser=null;
     location.reload();
 }
-// Enter key on login form
+// Enter key on login/signup forms
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('loginEmail').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginPass').focus()});
+document.getElementById('signupPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup()});
 
 // ============ I18N ============
 function toggleLang(){
