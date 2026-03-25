@@ -722,6 +722,87 @@
         .fu-badge.today{background:#f0fdf4;color:#10b981}
         .fu-badge.upcoming{background:#eff6ff;color:#3b82f6}
 
+        /* ===== SORT DROPDOWN ===== */
+        .sort-wrap{position:relative}
+        .sort-btn{
+            padding:8px 12px;border-radius:var(--r4);
+            background:#ffffff;border:1px solid #e2e8f0;color:#475569;
+            font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;
+            display:flex;align-items:center;gap:4px;white-space:nowrap;
+        }
+        .sort-btn:active{background:#f1f5f9}
+        .sort-menu{
+            display:none;position:absolute;top:100%;right:0;margin-top:4px;
+            background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;
+            box-shadow:0 8px 30px rgba(0,0,0,0.1);z-index:50;min-width:180px;
+            padding:6px;overflow:hidden;
+        }
+        .sort-menu.open{display:block;animation:fadeIn 0.15s}
+        .sort-opt{
+            padding:10px 14px;border-radius:8px;cursor:pointer;
+            font-size:12px;font-weight:500;color:#475569;
+            display:flex;align-items:center;gap:8px;transition:0.15s;
+        }
+        .sort-opt:hover{background:#f1f5f9}
+        .sort-opt.active{background:#eff6ff;color:#2563eb;font-weight:700}
+        .sort-opt-ico{font-size:14px;width:20px;text-align:center}
+
+        /* ===== DAILY TARGET ===== */
+        .target-card{
+            background:#ffffff;border:1px solid #e2e8f0;border-radius:var(--r2);
+            padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow-out);
+        }
+        .target-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+        .target-label{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px}
+        .target-count{font-size:13px;font-weight:800;color:#2563eb}
+        .target-bar{
+            height:8px;border-radius:4px;background:#f1f5f9;overflow:hidden;
+        }
+        .target-fill{
+            height:100%;border-radius:4px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
+            background:linear-gradient(90deg,#2563eb,#3b82f6);
+        }
+        .target-fill.good{background:linear-gradient(90deg,#10b981,#34d399)}
+        .target-fill.great{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+        .target-fill.fire{background:linear-gradient(90deg,#ef4444,#f97316)}
+        .target-msg{font-size:10px;color:#94a3b8;margin-top:6px;text-align:center}
+        .target-edit{
+            background:none;border:none;color:#94a3b8;font-size:10px;
+            cursor:pointer;font-family:inherit;font-weight:600;
+        }
+        .target-edit:hover{color:#2563eb}
+
+        /* ===== CUSTOM TAGS ===== */
+        .ctags-wrap{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+        .ctag{
+            font-size:9px;font-weight:600;padding:3px 8px;
+            border-radius:12px;background:#f0f4ff;color:#2563eb;
+            border:1px solid #bfdbfe;display:flex;align-items:center;gap:3px;
+        }
+        .ctag-x{
+            cursor:pointer;font-size:10px;opacity:0.5;line-height:1;
+        }
+        .ctag-x:hover{opacity:1;color:#ef4444}
+        .ctag-add{
+            font-size:9px;font-weight:600;padding:3px 8px;
+            border-radius:12px;background:#f8fafc;color:#94a3b8;
+            border:1px dashed #cbd5e1;cursor:pointer;
+            display:flex;align-items:center;gap:3px;
+        }
+        .ctag-add:hover{background:#f1f5f9;color:#475569;border-color:#94a3b8}
+        .tag-suggest{
+            display:none;position:absolute;bottom:100%;left:0;right:0;margin-bottom:4px;
+            background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;
+            box-shadow:0 -8px 30px rgba(0,0,0,0.08);z-index:50;padding:6px;
+            max-height:200px;overflow-y:auto;
+        }
+        .tag-suggest.open{display:block}
+        .tag-suggest-item{
+            padding:8px 12px;border-radius:6px;cursor:pointer;
+            font-size:12px;color:#475569;transition:0.15s;
+        }
+        .tag-suggest-item:hover{background:#f1f5f9}
+
         ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:4px}
     </style>
 </head>
@@ -873,6 +954,16 @@
         </div>
     </div>
 
+    <!-- Daily Target -->
+    <div class="target-card" id="targetCard">
+        <div class="target-top">
+            <span class="target-label">&#127919; Today's Target</span>
+            <span><span class="target-count" id="targetCount">0 / 25</span> <button class="target-edit" onclick="editTarget()">&#9998; Edit</button></span>
+        </div>
+        <div class="target-bar"><div class="target-fill" id="targetFill" style="width:0%"></div></div>
+        <div class="target-msg" id="targetMsg">Start scanning to hit your target!</div>
+    </div>
+
     <!-- Mini Analytics -->
     <div class="analytics-row">
         <div class="ana-card">
@@ -1002,6 +1093,17 @@
             <input class="search-input" id="sBox" type="text" placeholder="Search cards..." oninput="renderCards()">
         </div>
         <div class="toolbar-btns">
+            <div class="sort-wrap">
+                <button class="sort-btn" onclick="toggleSortMenu()">&#8645; Sort</button>
+                <div class="sort-menu" id="sortMenu">
+                    <div class="sort-opt active" onclick="setSort('date-desc')"><span class="sort-opt-ico">&#128197;</span> Newest First</div>
+                    <div class="sort-opt" onclick="setSort('date-asc')"><span class="sort-opt-ico">&#128197;</span> Oldest First</div>
+                    <div class="sort-opt" onclick="setSort('company')"><span class="sort-opt-ico">&#127970;</span> Company A-Z</div>
+                    <div class="sort-opt" onclick="setSort('score-desc')"><span class="sort-opt-ico">&#128293;</span> Hottest First</div>
+                    <div class="sort-opt" onclick="setSort('score-asc')"><span class="sort-opt-ico">&#10052;</span> Coldest First</div>
+                    <div class="sort-opt" onclick="setSort('priority')"><span class="sort-opt-ico">&#128308;</span> Priority High→Low</div>
+                </div>
+            </div>
             <button class="btn btn-neu btn-sm export-btn" id="exportBtn" onclick="openExport()">&#128229; Export</button>
         </div>
     </div>
@@ -1162,7 +1264,7 @@
 const WH='https://ritin1n8n.app.n8n.cloud/webhook/card-scanner-api';
 const DB_NAME='SSCardPro',DB_VER=2;
 let db,frontImgs=[],backImgs=[],audioBlob=null,mediaRec=null,audioChunks=[],isRec=false,recTimer=null,recSec=0,curModal=null;
-let activeFilter='all',batchSel=new Set(),lang='en';
+let activeFilter='all',batchSel=new Set(),lang='en',currentSort='date-desc';
 let currentUser=null;
 
 // ============ USERS ============
@@ -1455,6 +1557,8 @@ async function refreshStats(){
     const spMap={};ext.forEach(c=>{const sp=c.salesPerson||'?';spMap[sp]=(spMap[sp]||0)+1});
     const topSP=Object.entries(spMap).sort((a,b)=>b[1]-a[1])[0];
     document.getElementById('topSP').textContent=topSP?topSP[0]:'--';
+    // Daily Target
+    updateTarget(today.length);
 }
 
 // ============ PIE CHART ============
@@ -1515,7 +1619,14 @@ async function renderCards(){
     let f=all;if(q)f=all.filter(c=>[c.company_name,c.full_name,c.email,c.phone_number,c.mobile_number,c.salesPerson,c.eventName,c.quickNotes,c.products,c.job_title].filter(Boolean).join(' ').toLowerCase().includes(q));
     if(activeFilter==='hot')f=f.filter(c=>c._scoreLabel==='hot');
     else if(activeFilter!=='all')f=f.filter(c=>(c.remark||'').toLowerCase()===activeFilter);
-    f.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    // Sort based on currentSort
+    const priOrd={High:0,Medium:1,Low:2};
+    if(currentSort==='date-desc')f.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    else if(currentSort==='date-asc')f.sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    else if(currentSort==='company')f.sort((a,b)=>(a.company_name||'').localeCompare(b.company_name||''));
+    else if(currentSort==='score-desc')f.sort((a,b)=>(b._score||calcScore(b))-(a._score||calcScore(a)));
+    else if(currentSort==='score-asc')f.sort((a,b)=>(a._score||calcScore(a))-(b._score||calcScore(b)));
+    else if(currentSort==='priority')f.sort((a,b)=>(priOrd[a.remark]??9)-(priOrd[b.remark]??9));
     document.getElementById('rCount').innerHTML=`<span>${f.length} card${f.length!==1?'s':''}</span><span>${all.length} total</span>`;
     const el=document.getElementById('cList');
     if(!f.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#128203;</div><p>No cards found</p></div>';return}
@@ -1544,6 +1655,7 @@ async function renderCards(){
                     <span class="tag">${t}</span>
                     ${c.eventName?`<span class="tag ev">${esc(c.eventName)}</span>`:''}
                     ${c.quickNotes?'<span class="tag nt">&#128172; Notes</span>':''}
+                    ${(c.customTags||[]).map(t=>`<span class="ctag" style="margin:0">${esc(t)}</span>`).join('')}
                 </div>
                 <div class="lc-actions">
                     ${phone?`<button class="qa-btn call" onclick="event.stopPropagation();window.open('tel:${phone}')">&#128222;</button>`:''}
@@ -1565,6 +1677,21 @@ async function openDetail(id){
         h+=`<div class="mr"><div class="mr-label">${l}</div><div class="mr-val">${d}</div></div>`}
     if(c.frontImages&&c.frontImages.length){h+=`<div class="mr" style="flex-direction:column"><div class="mr-label" style="margin-bottom:6px">Card Images</div><div class="cgallery">`;
         for(const i of c.frontImages)h+=`<img src="${i}" onclick="showFS(this.src)">`;if(c.backImages)for(const i of c.backImages)h+=`<img src="${i}" onclick="showFS(this.src)">`;h+='</div></div>'}
+    // Custom tags section
+    const tags=c.customTags||[];
+    h+=`<div class="mr" style="flex-direction:column"><div class="mr-label" style="margin-bottom:6px">Tags</div>
+        <div class="ctags-wrap" id="modalTags">
+            ${tags.map((t,i)=>`<span class="ctag">${esc(t)}<span class="ctag-x" onclick="event.stopPropagation();removeTag(${c.id},${i})">&times;</span></span>`).join('')}
+            <span class="ctag-add" onclick="event.stopPropagation();addTag(${c.id})">+ Add Tag</span>
+        </div></div>`;
+    // Follow-up date display
+    if(c.followUpDate){
+        const fd=new Date(c.followUpDate);const today=new Date();today.setHours(0,0,0,0);fd.setHours(0,0,0,0);
+        const diff=Math.floor((fd-today)/86400000);
+        const cls=diff<0?'overdue':diff===0?'today':'upcoming';
+        const txt=diff<0?Math.abs(diff)+'d overdue':diff===0?'Today':'In '+diff+' days';
+        h+=`<div class="mr"><div class="mr-label">Follow-up</div><div class="mr-val"><span class="fu-badge ${cls}">${fd.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} &middot; ${txt}</span></div></div>`;
+    }
     document.getElementById('mBody').innerHTML=h;document.getElementById('modal').classList.add('open');
     // Hide Excel button in modal for non-admin
     document.querySelectorAll('.modal-export-btn').forEach(b=>{b.style.display=currentUser&&currentUser.role==='admin'?'':'none'});
@@ -1791,6 +1918,74 @@ function renderFollowUps(cards){
             <span class="fu-badge ${label}">${labelText}</span>
         </div>`;
     }).join('');
+}
+
+// ============ SORT ============
+function toggleSortMenu(){document.getElementById('sortMenu').classList.toggle('open')}
+function setSort(s){
+    currentSort=s;
+    document.querySelectorAll('.sort-opt').forEach(o=>o.classList.remove('active'));
+    event.target.closest('.sort-opt').classList.add('active');
+    document.getElementById('sortMenu').classList.remove('open');
+    renderCards();
+}
+// Close sort menu on outside click
+document.addEventListener('click',e=>{if(!e.target.closest('.sort-wrap'))document.getElementById('sortMenu')?.classList.remove('open')});
+
+// ============ DAILY TARGET ============
+function getDailyTarget(){return parseInt(localStorage.getItem('ss_daily_target')||'25')}
+function setDailyTarget(v){localStorage.setItem('ss_daily_target',String(v))}
+function editTarget(){
+    const cur=getDailyTarget();
+    const v=prompt('Set daily scan target:',cur);
+    if(!v||isNaN(v)||v<1)return;
+    setDailyTarget(parseInt(v));
+    refreshStats();
+    toast('Target set to '+v+' cards!','&#127919;');
+}
+function updateTarget(todayCount){
+    const target=getDailyTarget();
+    const pct=Math.min(100,Math.round((todayCount/target)*100));
+    document.getElementById('targetCount').textContent=todayCount+' / '+target;
+    const fill=document.getElementById('targetFill');
+    fill.style.width=pct+'%';
+    fill.className='target-fill'+(pct>=100?' fire':pct>=75?' great':pct>=50?' good':'');
+    const msg=document.getElementById('targetMsg');
+    if(todayCount===0)msg.textContent='Start scanning to hit your target!';
+    else if(pct<25)msg.textContent='Keep going! You just started.';
+    else if(pct<50)msg.textContent='Good progress! Almost halfway there.';
+    else if(pct<75)msg.textContent='Great work! More than halfway done!';
+    else if(pct<100)msg.textContent='Almost there! Just '+(target-todayCount)+' more to go!';
+    else msg.textContent='Target achieved! You\'re on fire! '+todayCount+' cards today!';
+}
+
+// ============ CUSTOM TAGS ============
+const TAG_SUGGESTIONS=['CNC Buyer','Laser Interested','Visit Factory','Hot Buyer','Repeat Customer','New Contact','Follow Up','Price Quote','Demo Request','Spare Parts','Service Needed','Automation','Distributor','OEM','Export Inquiry'];
+
+async function addTag(cardId){
+    const tag=prompt('Enter tag name:\n\nSuggestions: '+TAG_SUGGESTIONS.slice(0,8).join(', '));
+    if(!tag||!tag.trim())return;
+    const all=await dbAll('extracted');
+    const card=all.find(c=>c.id===cardId);
+    if(!card)return;
+    if(!card.customTags)card.customTags=[];
+    if(card.customTags.includes(tag.trim())){toast('Tag already exists','&#9888;');return}
+    card.customTags.push(tag.trim());
+    const tx=db.transaction('extracted','readwrite');
+    tx.objectStore('extracted').put(card);
+    toast('Tag added: '+tag.trim(),'&#127991;');
+    // Refresh modal
+    if(curModal&&curModal.id===cardId){curModal=card;openDetail(cardId)}
+}
+async function removeTag(cardId,idx){
+    const all=await dbAll('extracted');
+    const card=all.find(c=>c.id===cardId);
+    if(!card||!card.customTags)return;
+    const removed=card.customTags.splice(idx,1);
+    const tx=db.transaction('extracted','readwrite');
+    tx.objectStore('extracted').put(card);
+    toast('Tag removed','&#128465;');
+    if(curModal&&curModal.id===cardId){curModal=card;openDetail(cardId)}
 }
 
 // ============ INIT ============
