@@ -722,6 +722,21 @@
         .fu-badge.today{background:#f0fdf4;color:#10b981}
         .fu-badge.upcoming{background:#eff6ff;color:#3b82f6}
 
+        /* ===== TOGGLE SWITCH ===== */
+        .toggle-switch{position:relative;display:inline-block;width:44px;height:24px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-slider{
+            position:absolute;cursor:pointer;inset:0;
+            background:#cbd5e1;border-radius:24px;transition:0.3s;
+        }
+        .toggle-slider::before{
+            content:'';position:absolute;height:18px;width:18px;
+            left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s;
+            box-shadow:0 1px 3px rgba(0,0,0,0.2);
+        }
+        .toggle-switch input:checked+.toggle-slider{background:#10b981}
+        .toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px)}
+
         /* ===== SORT DROPDOWN ===== */
         .sort-wrap{position:relative}
         .sort-btn{
@@ -1044,7 +1059,24 @@
         </div>
         <div class="fg">
             <span class="flabel" data-en="Event" data-hi="&#2311;&#2357;&#2375;&#2306;&#2335;">Event</span> <span class="freq">*</span>
-            <select id="ev"><option value="">Select Event...</option><option value="AMTEX 2026">AMTEX 2026</option><option value="AUTOMATION EXPO 2026">AUTOMATION EXPO 2026</option></select>
+            <select id="ev" onchange="onEventChange()"><option value="">Select Event...</option><option value="AMTEX 2026">AMTEX 2026</option><option value="AUTOMATION EXPO 2026">AUTOMATION EXPO 2026</option><option value="IMTEX 2026 BANGALORE">IMTEX 2026 BANGALORE</option><option value="__other__">Other (Type below)</option></select>
+        </div>
+        <div class="fg" id="evOtherWrap" style="display:none">
+            <span class="flabel">Event Name</span>
+            <input type="text" id="evOther" placeholder="Type event name...">
+        </div>
+        <!-- Send Notification Toggle -->
+        <div class="fg" id="notifWrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+                <div>
+                    <span class="flabel" style="margin-bottom:2px">Send WhatsApp & Email</span>
+                    <div style="font-size:10px;color:#94a3b8" id="notifHint">Customer ko thank you message jayega</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="sendNotif" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
         </div>
         <div class="fg">
             <span class="flabel" data-en="Quick Notes" data-hi="&#2325;&#2381;&#2357;&#2367;&#2325; &#2344;&#2379;&#2335;&#2381;&#2360;">Quick Notes</span>
@@ -1462,19 +1494,46 @@ function calcScore(c){
 }
 function scoreLabel(s){return s>=60?'hot':s>=35?'warm':'cold'}
 
+// ============ EVENT CHANGE ============
+function onEventChange(){
+    const ev=document.getElementById('ev').value;
+    const otherWrap=document.getElementById('evOtherWrap');
+    const notifCheck=document.getElementById('sendNotif');
+    const notifHint=document.getElementById('notifHint');
+    if(ev==='__other__'){
+        otherWrap.style.display='block';
+        notifCheck.checked=false;
+        notifHint.textContent='Other event — notification OFF (dusre ka exhibition hai)';
+        notifHint.style.color='#f59e0b';
+    }else{
+        otherWrap.style.display='none';
+        notifCheck.checked=true;
+        notifHint.textContent='Customer ko thank you message jayega';
+        notifHint.style.color='#94a3b8';
+    }
+}
+
 // ============ SUBMIT ============
 async function submitCard(){
     if(!frontImgs.length)return toast('Add card photo','&#128247;');
     if(!currentUser)return toast('Please login first','&#128100;');
     if(!document.getElementById('sp').value)return toast('Sales person not set','&#128100;');
     if(!document.getElementById('pr').value)return toast('Select priority','&#9888;');
+    // Get event name — handle "Other"
+    let evVal=document.getElementById('ev').value;
+    if(evVal==='__other__'){
+        evVal=document.getElementById('evOther').value.trim();
+        if(!evVal)return toast('Type event name','&#9888;');
+    }
+    if(!evVal)return toast('Select event','&#9888;');
+    const sendNotif=document.getElementById('sendNotif').checked;
     const btn=document.getElementById('subBtn'),txt=document.getElementById('subTxt'),ico=document.getElementById('subIco');
     btn.disabled=true;txt.textContent='Saving...';ico.textContent='';
     try{
         const cf=[];for(const m of frontImgs)cf.push(await compress(m.url));
         const cb=[];for(const m of backImgs)cb.push(await compress(m.url));
         let ab=null;if(audioBlob)ab=await blob2b64(audioBlob);
-        const data={frontImages:cf,backImages:cb,voiceNote:ab,salesPerson:document.getElementById('sp').value,remark:document.getElementById('pr').value,eventName:document.getElementById('ev').value,quickNotes:document.getElementById('qn').value,timestamp:new Date().toISOString(),status:'pending'};
+        const data={frontImages:cf,backImages:cb,voiceNote:ab,salesPerson:document.getElementById('sp').value,remark:document.getElementById('pr').value,eventName:evVal,sendNotification:sendNotif,quickNotes:document.getElementById('qn').value,timestamp:new Date().toISOString(),status:'pending'};
         await dbAdd('cards',data);toast('Card saved!','&#9989;');resetForm();refreshStats();renderQueue();renderHist();
         if(navigator.onLine)setTimeout(()=>syncAll(),1000);
     }catch(e){console.error(e);toast('Error saving','&#9888;')}
@@ -1489,6 +1548,10 @@ function resetForm(){
     document.getElementById('recWave').classList.remove('show');
     document.getElementById('qn').value='';document.getElementById('dupWarn').classList.remove('show');
     document.getElementById('prevStrip').classList.remove('show');
+    document.getElementById('ev').value='';document.getElementById('evOther').value='';
+    document.getElementById('evOtherWrap').style.display='none';
+    document.getElementById('sendNotif').checked=true;
+    document.getElementById('notifHint').textContent='Customer ko thank you message jayega';
     // Keep sales person name from login
     if(currentUser)document.getElementById('sp').value=currentUser.name;
 }
@@ -1521,6 +1584,7 @@ async function sendWH(c){
     if(c.voiceNote)fd.append('Voice Note',b642blob(c.voiceNote,'audio/webm'),'voice_note.webm');
     fd.append('Sales Person Name',c.salesPerson);fd.append('Remark',c.remark);
     fd.append('Event Name',c.eventName||'');fd.append('Quick Notes',c.quickNotes||'');
+    fd.append('Send Notification',c.sendNotification===false?'No':'Yes');
     console.log('Sending to webhook:',WH);
     console.log('FormData keys:',[...fd.keys()]);
     try{
