@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Sonic – Laser & Automation Experts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --blue:#2563EB;
+  --blue-l:#3B82F6;
+  --blue-glow:rgba(37,99,235,0.22);
+  --blue-soft:rgba(37,99,235,0.1);
+  --teal:#059669;
+  --teal-l:#10B981;
+  --teal-soft:rgba(5,150,105,0.12);
+  --bg:#0F172A;
+  --card:#1E293B;
+  --card2:#334155;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --text:#F1F5F9;
+  --text2:#94A3B8;
+  --text3:#64748B;
+  --tr:.25s cubic-bezier(.4,0,.2,1);
+  --font:'Space Grotesk','Inter',sans-serif;
+}
+
+html{font-family:var(--font);background:var(--bg);color:var(--text);scroll-behavior:smooth}
+body{background:var(--bg);min-height:100vh;overflow-x:hidden}
+
+/* ═══════════ NAVBAR ═══════════ */
+.navbar{
+  position:fixed;top:0;left:0;right:0;height:56px;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:rgba(15,23,42,0.92);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-logo-mark{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 14px var(--blue-glow);flex-shrink:0;
+}
+.nav-logo-mark span{color:#fff;font-size:11px;font-weight:900;letter-spacing:.5px}
+.nav-logo-text strong{display:block;color:#fff;font-size:13.5px;font-weight:700;letter-spacing:.4px}
+.nav-logo-text small{color:var(--text3);font-size:8.5px;letter-spacing:1.2px;text-transform:uppercase}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nav-btn-wa{
+  display:flex;align-items:center;gap:6px;
+  background:var(--teal-soft);border:1px solid rgba(5,150,105,.25);
+  color:var(--teal-l);padding:7px 14px;border-radius:50px;
+  font-size:11.5px;font-weight:600;text-decoration:none;
+  transition:var(--tr);font-family:var(--font);white-space:nowrap;
+}
+.nav-btn-wa:hover{background:rgba(5,150,105,.18);transform:translateY(-1px)}
+.nav-btn-wa svg{flex-shrink:0}
+
+/* ═══════════ PAGE SCROLL CONTAINER ═══════════ */
+.page{
+  padding-top:56px;
+  padding-bottom:52px;
+  overflow-x:hidden;
+}
+
+/* ═══════════ HERO SECTION ═══════════ */
+.hero{
+  background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 50%,#1D4ED8 100%);
+  padding:36px 24px 28px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 70% 30%,rgba(37,99,235,0.25),transparent 60%),
+             radial-gradient(circle at 30% 80%,rgba(5,150,105,0.15),transparent 50%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.hero .logo-badge{display:none}
+.hero h1{
+  font-size:clamp(1.3rem,4.5vw,2.2rem);font-weight:800;
+  line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:4px;
+}
+.hero .tagline{
+  display:inline-block;
+  background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.3);
+  color:var(--teal-l);font-size:11px;font-weight:600;
+  padding:4px 14px;border-radius:50px;margin-bottom:12px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.hero .headline{
+  font-size:clamp(1.1rem,3.5vw,1.6rem);font-weight:700;
+  color:rgba(255,255,255,0.85);margin-bottom:8px;
+}
+.hero .subtitle{
+  font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;
+}
+.hero-ctas{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.cta-main{
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  color:#fff;border:none;padding:12px 24px;border-radius:50px;
+  font-size:13.5px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px var(--blue-glow);
+  transition:var(--tr);font-family:var(--font);white-space:nowrap;
+}
+.cta-main:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(37,99,235,.4)}
+.cta-ghost{
+  display:flex;align-items:center;gap:7px;
+  background:transparent;color:var(--teal-l);
+  border:2px solid rgba(5,150,105,.4);
+  padding:10px 22px;border-radius:50px;
+  font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none;
+  transition:var(--tr);font-family:var(--font);white-space:nowrap;
+}
+.cta-ghost:hover{border-color:var(--teal-l);background:var(--teal-soft);transform:translateY(-1px)}
+.hero-stats{
+  display:flex;justify-content:center;gap:0;
+}
+.stat-block{padding:0 20px;text-align:center}
+.stat-block+.stat-block{border-left:1.5px solid rgba(255,255,255,0.15)}
+.stat-num{font-size:22px;font-weight:800;color:#fff;line-height:1;margin-bottom:2px}
+.stat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+
+/* ═══════════ PRODUCT CAROUSEL SECTION ═══════════ */
+.products-section{
+  padding:32px 0 24px;
+}
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;margin-bottom:16px;
+}
+.section-header h2{
+  font-size:clamp(1.1rem,3vw,1.5rem);font-weight:800;color:#fff;
+  display:flex;align-items:center;gap:10px;
+}
+.section-header h2::before{
+  content:'';width:4px;height:24px;border-radius:2px;
+  background:linear-gradient(180deg,var(--blue),var(--teal));flex-shrink:0;
+}
+.carousel-nav{display:flex;gap:6px}
+.carousel-nav button{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--card);border:1px solid var(--border2);
+  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:var(--tr);flex-shrink:0;
+}
+.carousel-nav button:hover{background:var(--blue-soft);border-color:rgba(37,99,235,.35)}
+.carousel-nav button svg{width:16px;height:16px;fill:currentColor}
+
+.carousel-wrapper{position:relative;overflow:hidden}
+.carousel{
+  display:flex;gap:14px;
+  padding:0 24px 16px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.carousel::-webkit-scrollbar{display:none}
+
+.product-card{
+  flex:0 0 260px;
+  height:320px;
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  scroll-snap-align:start;
+  cursor:pointer;
+  transition:transform .3s ease,box-shadow .3s ease;
+  border:1px solid var(--border);
+}
+.product-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4);
+}
+.card-bg{
+  position:absolute;inset:0;z-index:0;
+}
+.card-icon{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-65%);
+  z-index:0;font-size:64px;opacity:0.35;pointer-events:none;
+  filter:grayscale(0.2);
+}
+.card-img{
+  position:absolute;inset:0;z-index:1;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.card-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to top,rgba(0,0,0,0.82) 0%,rgba(0,0,0,0.1) 45%,transparent 100%);
+  pointer-events:none;
+}
+.card-content{
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+  padding:16px;
+}
+.card-cat{
+  display:inline-block;
+  background:rgba(37,99,235,0.3);border:1px solid rgba(37,99,235,0.4);
+  color:#93C5FD;font-size:9px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:3px 10px;border-radius:50px;margin-bottom:8px;
+}
+.card-cat.laser{
+  background:rgba(5,150,105,0.3);border-color:rgba(5,150,105,0.4);
+  color:#6EE7B7;
+}
+.card-name{
+  font-size:15px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:4px;
+}
+.card-desc{
+  font-size:10.5px;color:rgba(255,255,255,0.6);line-height:1.4;margin-bottom:8px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-inquire{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#fff;padding:6px 14px;border-radius:50px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  transition:var(--tr);font-family:var(--font);
+}
+.card-inquire:hover{background:var(--blue);border-color:var(--blue)}
+.card-inquire svg{width:12px;height:12px;fill:currentColor}
+
+/* Carousel dots */
+.carousel-dots{
+  display:flex;justify-content:center;gap:5px;padding:4px 0 0;
+}
+.c-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,0.15);cursor:pointer;
+  transition:all .3s ease;border:none;
+}
+.c-dot.active{background:var(--blue);box-shadow:0 0 8px var(--blue-glow);transform:scale(1.2)}
+
+/* ═══════════ WHY CHOOSE US ═══════════ */
+.why-section{
+  padding:24px 24px 32px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+}
+.why-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:20px 16px;text-align:center;
+  transition:var(--tr);
+}
+.why-card:hover{border-color:rgba(37,99,235,0.3);transform:translateY(-2px)}
+.why-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:10px;font-size:20px;
+}
+.why-card:nth-child(1) .why-icon{background:var(--blue-soft)}
+.why-card:nth-child(2) .why-icon{background:var(--teal-soft)}
+.why-card:nth-child(3) .why-icon{background:rgba(245,158,11,0.1)}
+.why-card h3{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+.why-card p{font-size:10.5px;color:var(--text3);line-height:1.5}
+
+/* ═══════════ TICKER ═══════════ */
+.ticker{
+  position:fixed;bottom:0;left:0;right:0;height:42px;z-index:200;
+  display:flex;align-items:center;overflow:hidden;
+  background:rgba(15,23,42,0.95);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+}
+.ticker-label{
+  flex-shrink:0;padding:0 14px;font-size:8px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--blue-l);
+  border-right:1px solid rgba(37,99,235,.18);
+  height:100%;display:flex;align-items:center;white-space:nowrap;
+}
+.ticker-track{display:flex;align-items:center;animation:scroll 36s linear infinite;white-space:nowrap}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:0 20px;font-size:11px;font-weight:500;
+  color:var(--text2);border-right:1px solid var(--border);height:42px;
+}
+.ticker-item svg{width:4px;height:4px;fill:var(--blue-l);flex-shrink:0}
+
+/* ═══════════ CHAT FAB ═══════════ */
+.chat-fab{
+  position:fixed;bottom:56px;right:18px;
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px var(--blue-glow);
+  z-index:400;transition:var(--tr);
+}
+.chat-fab:hover{transform:scale(1.08);box-shadow:0 8px 36px rgba(37,99,235,.45)}
+.chat-fab.active{background:linear-gradient(135deg,#64748B,#475569);box-shadow:none}
+.chat-fab svg{width:22px;height:22px;fill:#fff;transition:var(--tr)}
+.chat-fab .icon-close{position:absolute;opacity:0;transform:rotate(-90deg) scale(.6)}
+.chat-fab.active .icon-chat{opacity:0;transform:rotate(90deg) scale(.6)}
+.chat-fab.active .icon-close{opacity:1;transform:rotate(0) scale(1)}
+
+/* Pulse ring on FAB */
+.chat-fab::after{
+  content:'';position:absolute;inset:-4px;
+  border-radius:50%;border:2px solid rgba(37,99,235,0.4);
+  animation:fabPulse 2.5s ease infinite;
+}
+.chat-fab.active::after{display:none}
+@keyframes fabPulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.35);opacity:0}}
+
+/* ═══════════ CHAT PANEL — slide-up drawer ═══════════ */
+.chat-window{
+  position:fixed;bottom:0;right:0;
+  width:400px;
+  height:min(600px,calc(100vh - 60px));
+  border-radius:18px 18px 0 0;overflow:hidden;
+  display:flex;flex-direction:column;z-index:500;
+  box-shadow:0 -10px 60px rgba(0,0,0,.5),0 0 0 1px rgba(37,99,235,.12);
+  transform:translateY(100%);
+  opacity:0;pointer-events:none;
+  transition:transform .35s cubic-bezier(.34,1.2,.64,1),opacity .22s ease;
+}
+.chat-window.open{transform:translateY(0);opacity:1;pointer-events:all}
+.chat-header{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;
+  background:linear-gradient(135deg,#0F172A,#1E293B);
+  border-bottom:1px solid rgba(37,99,235,.15);flex-shrink:0;
+}
+.chat-hd-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;box-shadow:0 2px 10px var(--blue-glow);
+}
+.chat-hd-icon svg{width:16px;height:16px;fill:#fff}
+.chat-hd-info{flex:1;min-width:0}
+.chat-hd-info h3{font-size:14px;font-weight:700;color:#fff}
+.chat-hd-status{display:flex;align-items:center;gap:5px;margin-top:1px}
+.online-dot{width:5px;height:5px;border-radius:50%;background:var(--teal-l);animation:pulse 2.2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
+.chat-hd-status span{font-size:10.5px;color:var(--text3)}
+.chat-hd-close{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.07);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:var(--tr);flex-shrink:0;
+}
+.chat-hd-close:hover{background:rgba(255,255,255,.14)}
+.chat-hd-close svg{width:14px;height:14px;fill:rgba(255,255,255,.45)}
+.powered-bar{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 16px;background:var(--card);
+  border-bottom:1px solid var(--border);
+  font-size:9.5px;color:var(--text3);flex-shrink:0;
+}
+.powered-bar strong{color:var(--blue-l);font-weight:600}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:12px 12px;
+  background:var(--bg);display:flex;flex-direction:column;gap:9px;
+}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(37,99,235,.2);border-radius:3px}
+.message{display:flex;gap:7px;animation:msgIn .25s ease;max-width:90%}
+.message.user{align-self:flex-end;flex-direction:row-reverse}
+.message.bot{align-self:flex-start}
+@keyframes msgIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.msg-av{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;align-self:flex-end;
+}
+.msg-av svg{width:12px;height:12px;fill:#fff}
+.msg-content{display:flex;flex-direction:column;gap:2px}
+.msg-bubble{
+  padding:10px 13px;font-size:12.5px;line-height:1.55;
+  word-wrap:break-word;white-space:pre-wrap;font-family:'Inter',sans-serif;
+}
+.message.bot .msg-bubble{
+  background:var(--card);color:#CBD5E1;
+  border-radius:4px 13px 13px 13px;border:1px solid var(--border);
+}
+.message.user .msg-bubble{
+  background:linear-gradient(135deg,#1E3A5F,#1D4ED8);
+  color:#BFDBFE;border-radius:13px 4px 13px 13px;
+  border:1px solid rgba(37,99,235,.25);
+}
+.msg-time{font-size:9.5px;color:var(--text3);padding:0 2px}
+.message.user .msg-time{text-align:right}
+.option-buttons{display:flex;flex-direction:column;gap:6px;margin-top:7px}
+.option-btn{
+  padding:8px 12px;background:var(--card);
+  border:1px solid rgba(37,99,235,.15);border-radius:9px;
+  color:#60A5FA;font-size:12.5px;font-weight:500;
+  font-family:'Inter',sans-serif;cursor:pointer;
+  transition:var(--tr);text-align:left;
+  display:flex;align-items:center;gap:8px;
+}
+.option-btn:hover{background:var(--blue-soft);border-color:rgba(37,99,235,.3);transform:translateX(3px)}
+.option-btn .opt-num{
+  width:20px;height:20px;border-radius:50%;
+  background:rgba(37,99,235,.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#60A5FA;flex-shrink:0;transition:var(--tr);
+}
+.option-btn:hover .opt-num{background:var(--blue);color:#fff}
+.option-btn.disabled{opacity:.35;pointer-events:none;color:var(--text3);border-color:var(--border)}
+.typing-indicator{display:flex;gap:7px;align-self:flex-start;max-width:88%;animation:msgIn .3s ease}
+.typing-bubble{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:4px 13px 13px 13px;padding:12px 15px;
+  display:flex;align-items:center;gap:4px;
+}
+.typing-dot{width:5px;height:5px;background:rgba(37,99,235,.5);border-radius:50%;animation:bounce 1.4s ease infinite}
+.typing-dot:nth-child(2){animation-delay:.16s}
+.typing-dot:nth-child(3){animation-delay:.32s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.chat-input-area{
+  padding:10px 12px;background:var(--card);
+  border-top:1px solid var(--border);
+  display:flex;align-items:flex-end;gap:7px;flex-shrink:0;
+}
+.input-wrap{
+  flex:1;background:#0F172A;border:1.5px solid var(--border2);
+  border-radius:11px;padding:8px 12px;display:flex;align-items:center;transition:var(--tr);
+}
+.input-wrap:focus-within{border-color:rgba(37,99,235,.35);box-shadow:0 0 0 3px rgba(37,99,235,.07)}
+.chat-input{
+  flex:1;border:none;outline:none;background:none;
+  font-size:12.5px;font-family:'Inter',sans-serif;
+  color:var(--text);resize:none;max-height:80px;line-height:1.4;
+}
+.chat-input::placeholder{color:var(--text3)}
+.send-btn{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:var(--tr);flex-shrink:0;
+}
+.send-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 14px var(--blue-glow)}
+.send-btn:disabled{background:var(--card2);cursor:not-allowed;box-shadow:none}
+.send-btn svg{width:16px;height:16px;fill:#fff}
+.welcome-screen{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:20px 16px;text-align:center;background:var(--bg);
+}
+.welcome-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;box-shadow:0 6px 24px var(--blue-glow);
+}
+.welcome-icon svg{width:26px;height:26px;fill:#fff}
+.welcome-screen h2{font-size:17px;font-weight:800;color:#fff;margin-bottom:5px}
+.welcome-screen p{font-size:11.5px;color:var(--text3);line-height:1.65;margin-bottom:18px;max-width:240px}
+.welcome-topics{display:flex;flex-direction:column;gap:5px;width:100%}
+.topic-btn{
+  padding:9px 12px;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;font-size:12px;font-weight:500;
+  font-family:'Inter',sans-serif;color:var(--text2);cursor:pointer;
+  transition:var(--tr);display:flex;align-items:center;gap:8px;text-align:left;
+}
+.topic-btn:hover{border-color:rgba(37,99,235,.25);background:var(--blue-soft);color:#fff;transform:translateX(3px)}
+.topic-btn .topic-icon{font-size:15px;flex-shrink:0}
+.date-separator{text-align:center;padding:5px 0}
+.date-separator span{background:var(--card);color:var(--text3);font-size:9.5px;font-weight:500;padding:3px 10px;border-radius:20px}
+.meeting-card{
+  background:var(--blue-soft);border:1px solid rgba(37,99,235,.2);
+  border-radius:10px;padding:12px;margin-top:7px;
+}
+.meeting-card h4{color:#60A5FA;font-size:12.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.meeting-card .detail{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)}
+.meeting-card .detail:last-child{border-bottom:none}
+.meeting-card .detail strong{color:#BFDBFE}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:1024px){
+  .product-card{flex:0 0 240px;height:300px}
+  .why-section{gap:10px}
+}
+
+@media(max-width:768px){
+  .chat-window{width:100%;border-radius:16px 16px 0 0}
+  .product-card{flex:0 0 220px;height:280px}
+  .why-section{grid-template-columns:1fr;gap:8px;padding:20px 24px 28px}
+  .why-card{padding:16px 14px}
+}
+
+@media(max-width:640px){
+  .navbar{height:50px;padding:0 14px}
+  .nav-btn-wa span{display:none}
+  .nav-btn-wa{padding:7px 10px}
+  .page{padding-top:50px;padding-bottom:46px}
+  .hero{padding:20px 16px 18px}
+  .hero h1{font-size:clamp(1.1rem,4vw,1.7rem);margin-bottom:3px}
+  .hero .tagline{font-size:9px;padding:3px 10px;margin-bottom:6px}
+  .hero .headline{font-size:clamp(0.95rem,3vw,1.3rem);margin-bottom:4px}
+  .hero .subtitle{font-size:11px;margin-bottom:10px;line-height:1.45}
+  .cta-main{padding:9px 16px;font-size:12px}
+  .cta-ghost{padding:8px 14px;font-size:12px}
+  .stat-num{font-size:18px}
+  .stat-block{padding:0 12px}
+  .stat-lbl{font-size:7.5px;letter-spacing:.6px}
+  .products-section{padding:24px 0 18px}
+  .section-header{padding:0 18px;margin-bottom:12px}
+  .carousel{gap:10px;padding:0 18px 12px}
+  .product-card{flex:0 0 240px;height:280px}
+  .card-name{font-size:13px}
+  .card-cat{font-size:8px;padding:2px 8px}
+  .card-inquire{font-size:10px;padding:5px 12px}
+  .ticker{height:38px}
+  .ticker-label{display:none}
+  .ticker-item{font-size:10px;padding:0 14px;height:38px}
+  .chat-fab{bottom:50px;right:14px;width:50px;height:50px}
+  .chat-window{width:100%;height:calc(100vh - 50px)}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-mark"><span>SS</span></div>
+    <div class="nav-logo-text">
+      <strong>SUPER SONIC</strong>
+      <small>Import &amp; Export</small>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a class="nav-btn-wa" id="waBtn" href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="logo-badge"><span>SS</span></div>
+      <h1>Super Sonic Import &amp; Export</h1>
+      <div class="tagline">India's Laser &amp; Automation Partner</div>
+      <div class="headline">Precision Parts &amp; Machines</div>
+      <p class="subtitle">Premium Servo Motors, VFDs, Fiber Laser Machines, Spindles, Ball Screws &amp; more — sourced globally, delivered across India.</p>
+      <div class="hero-ctas">
+        <button class="cta-main" onclick="toggleChat()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          Chat with AI Expert
+        </button>
+        <a class="cta-ghost" id="ctaWa" href="#">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Now
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-block"><div class="stat-num"><span id="stat1">0</span>+</div><div class="stat-lbl">Products in Stock</div></div>
+        <div class="stat-block"><div class="stat-num"><span id="stat2">0</span>+</div><div class="stat-lbl">Top Brands</div></div>
+        <div class="stat-block"><div class="stat-num">PAN</div><div class="stat-lbl">India Delivery</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT CAROUSEL -->
+  <section class="products-section">
+    <div class="section-header">
+      <h2>Our Products</h2>
+      <div class="carousel-nav">
+        <button onclick="carouselPrev()"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+        <button onclick="carouselNext()"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+      </div>
+    </div>
+    <div class="carousel-wrapper">
+      <div class="carousel" id="carousel"></div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section">
+    <div class="why-card">
+      <div class="why-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="#3B82F6"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+      <h3>500+ Products</h3>
+      <p>Complete range of laser parts, servo motors, VFDs &amp; CNC components</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="#10B981"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
+      <h3>Genuine Brands</h3>
+      <p>Yako, Panasonic, MAX, Raycus, BOCHU, S&amp;A, Delixi &amp; more</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="#F59E0B"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+      <h3>Fast Delivery</h3>
+      <p>PAN India shipping with quick dispatch from our warehouse</p>
+    </div>
+  </section>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">Products</div>
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- CHAT FAB -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg class="icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/><path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+  <svg class="icon-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+</button>
+
+<!-- CHAT PANEL -->
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-hd-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/><path d="M12 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 1c-1.33 0-4 .67-4 2v1h8v-1c0-1.33-2.67-2-4-2z"/></svg></div>
+    <div class="chat-hd-info"><h3>AI Assistant</h3><div class="chat-hd-status"><div class="online-dot"></div><span>Online · Replies instantly</span></div></div>
+    <button class="chat-hd-close" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+  </div>
+  <div class="powered-bar"><span>Powered by</span><strong>Super Sonic AI</strong></div>
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+    <h2>Welcome to Super Sonic!</h2>
+    <p>Ask about any product, get a quote, or book a meeting with our expert.</p>
+    <div class="welcome-topics">
+      <button class="topic-btn" onclick="sendQuickMessage('I need Automation Parts & Machinery')"><span class="topic-icon">⚙️</span><span>Automation Parts & Machinery</span></button>
+      <button class="topic-btn" onclick="sendQuickMessage('I need Laser Parts & Machinery')"><span class="topic-icon">⚡</span><span>Laser Parts & Machinery</span></button>
+      <button class="topic-btn" onclick="sendQuickMessage('I want to book a meeting')"><span class="topic-icon">📅</span><span>Book a Meeting</span></button>
+      <button class="topic-btn" onclick="sendQuickMessage('Hi')"><span class="topic-icon">👋</span><span>Just say Hi!</span></button>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages" style="display:none"></div>
+  <div class="chat-input-area">
+    <div class="input-wrap"><input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeydown="handleKeyDown(event)" autocomplete="off"></div>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+  </div>
+</div>
+
+<script>
+const WEBHOOK_URL='https://ritin1n8n.app.n8n.cloud/webhook/f55f6636-5d2b-4ab4-9205-756bdbd2f510/chat';
+const WHATSAPP_NUMBER='916353767128';
+const PRODUCTS=[
+  {name:'Yako Servo Motor & Drive',cat:'Automation Parts',desc:'High-precision Yako servo motor & drive system for CNC, textile & industrial automation.',img:'PRODUCTS PHOTOS/YAKO SERVO SET 200W.jpg',bg:'linear-gradient(135deg,#1E3A5F,#2563EB)',icon:'⚙️'},
+  {name:'Super Sonic Fiber Laser Machine',cat:'Laser Machinery',desc:'High-speed fiber laser cutting for MS, SS & Aluminium. 1kW to 20kW power range.',img:'PRODUCTS PHOTOS/SUPER SONIC FIBER LASER.jpeg',bg:'linear-gradient(135deg,#7F1D1D,#DC2626)',icon:'🔴'},
+  {name:'VFD Drive (Delixi / Folinn)',cat:'Automation Parts',desc:'Variable Frequency Drives for precise motor speed control. 0.4kW to 400kW.',img:'PRODUCTS PHOTOS/VFD DELIXI.jpg',bg:'linear-gradient(135deg,#1E3A5F,#0D9488)',icon:'⚡'},
+  {name:'MAX / Raycus Laser Source',cat:'Laser Parts',desc:'Genuine fiber laser sources for cutting & engraving. 1kW to 30kW available.',img:'PRODUCTS PHOTOS/MAX LASER SOURCE.png',bg:'linear-gradient(135deg,#991B1B,#F59E0B)',icon:'💡'},
+  {name:'BOCHU Laser Cutting Head',cat:'Laser Parts',desc:'Auto-focus cutting heads for high-precision fiber laser cutting at any thickness.',img:'PRODUCTS PHOTOS/BOCHU HEAD SET.avif',bg:'linear-gradient(135deg,#1E3A8A,#3B82F6)',icon:'🎯'},
+  {name:'Panasonic Servo System',cat:'Automation Parts',desc:'Panasonic A6 series servo motor & drive. Ultra-smooth motion control.',img:'PRODUCTS PHOTOS/PANASONIC SERVO SET.jpg',bg:'linear-gradient(135deg,#4C1D95,#10B981)',icon:'🔧'},
+  {name:'S&A Industrial Chiller',cat:'Laser Parts',desc:'Industrial water chillers for laser cooling. Optimal temperature for longer life.',img:'PRODUCTS PHOTOS/s&a chiller 6000 1.jpg',bg:'linear-gradient(135deg,#0E4429,#2563EB)',icon:'❄️'},
+  {name:'Pneumatic Cylinder & Valve',cat:'Automation Parts',desc:'Complete range of pneumatic cylinders & solenoid valves for industrial automation.',img:'PRODUCTS PHOTOS/NEUMATIC CYLINDER 01.jpg',bg:'linear-gradient(135deg,#065F46,#34D399)',icon:'🔩'},
+  {name:'CNC Spindle Motor',cat:'Automation Parts',desc:'Air & water cooled spindles for CNC routers. 1.5kW–7.5kW, 24000 RPM.',img:'PRODUCTS PHOTOS/CNC-Router-Parts-High-Speed-1-5kw-220V-380V-Air-Cooled-Spindle.avif',bg:'linear-gradient(135deg,#312E81,#6366F1)',icon:'🌀'},
+  {name:'Ball Screw & Linear Guide',cat:'Automation Parts',desc:'Precision ball screws & linear guideways. HIWIN & TBI brand. All sizes.',img:'PRODUCTS PHOTOS/ball screw & nut.jpeg',bg:'linear-gradient(135deg,#44403C,#A78BFA)',icon:'🔗'},
+  {name:'Stepper Motor & Drive',cat:'Automation Parts',desc:'NEMA 17, 23 & 34 steppers with microstepping drives for CNC & 3D printers.',img:'PRODUCTS PHOTOS/Stepper motors.JPG',bg:'linear-gradient(135deg,#1E293B,#3B82F6)',icon:'⚙️'},
+  {name:'Rack & Pinion Gear',cat:'Automation Parts',desc:'Hardened rack & pinion sets for CNC gantry machines. M1 to M3 module.',img:'PRODUCTS PHOTOS/Rack & Pinion.jpeg',bg:'linear-gradient(135deg,#065F46,#34D399)',icon:'⛓️'},
+  {name:'AC Gear Motor',cat:'Automation Parts',desc:'AC gear motors with gearboxes for conveyor, packaging & industrial use.',img:'PRODUCTS PHOTOS/AC GEAR MOTOR SET.jpeg',bg:'linear-gradient(135deg,#1E3A5F,#0EA5E9)',icon:'🔄'},
+  {name:'Weihong / NK105 Controller',cat:'Laser Parts',desc:'CNC motion controllers for routers & plasma. Multi-axis, USB & Ethernet.',img:'PRODUCTS PHOTOS/Wihong CNC Controller.png',bg:'linear-gradient(135deg,#1E3A8A,#6366F1)',icon:'🖥️'},
+  {name:'UV & CO₂ Laser System',cat:'Laser Parts',desc:'UV laser for PCB & glass marking. CO₂ for acrylic & wood cutting.',img:'PRODUCTS PHOTOS/uv laser 1.png',bg:'linear-gradient(135deg,#7F1D1D,#F97316)',icon:'🔬'}
+];
+const TICKER_ITEMS=['Servo Motors','VFD Drives','Fiber Laser Machines','Ball Screws','CNC Spindles','Stepper Motors','Laser Cutting Heads','Pneumatic Cylinders','Rack & Pinion Gears','AC Gear Motors','CNC Controllers','Industrial Chillers','Linear Guideways','Laser Sources','Drag Chains','Planetary Gearboxes'];
+
+let isOpen=false,isFirstMessage=true,isWaiting=false;
+let sessionId='ss_'+Date.now()+'_'+Math.random().toString(36).substring(2,9);
+let carouselAutoTimer=null,carouselPos=0;
+
+function animateCounter(id,s,e,d){const el=document.getElementById(id);if(!el)return;const st=performance.now();function t(n){const p=Math.min((n-st)/d,1);el.textContent=Math.floor(s+(e-s)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(t);else el.textContent=e}requestAnimationFrame(t)}
+
+/* ═══════════ CAROUSEL LOGIC ═══════════ */
+function buildCarousel(){
+  const c=document.getElementById('carousel');
+  const dots=document.getElementById('carouselDots');
+  PRODUCTS.forEach((p,i)=>{
+    const isLaser=p.cat.toLowerCase().includes('laser');
+    const imgSrc=p.img?p.img.split('/').map(s=>encodeURIComponent(s)).join('/'):'';
+    const card=document.createElement('div');
+    card.className='product-card';
+    card.onclick=()=>inquireAbout(p.name);
+    card.innerHTML=`
+      <div class="card-bg" style="background:${p.bg};width:100%;height:100%"></div>
+      <div class="card-icon">${p.icon||''}</div>
+      ${imgSrc?`<img class="card-img" src="${imgSrc}" alt="${p.name}" onerror="this.style.display='none'" loading="lazy">`:''}
+      <div class="card-overlay"></div>
+      <div class="card-content">
+        <div class="card-cat${isLaser?' laser':''}">${p.icon||''} ${p.cat}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <button class="card-inquire" onclick="event.stopPropagation();inquireAbout('${p.name.replace(/'/g,"\\'")}')">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          Inquire
+        </button>
+      </div>`;
+    c.appendChild(card);
+  });
+
+  // Build dots
+  const cardsVisible=getCardsVisible();
+  const totalDots=Math.ceil(PRODUCTS.length/cardsVisible);
+  for(let i=0;i<totalDots;i++){
+    const dot=document.createElement('button');
+    dot.className='c-dot'+(i===0?' active':'');
+    dot.onclick=()=>scrollToGroup(i);
+    dots.appendChild(dot);
+  }
+
+  startCarouselAuto();
+}
+
+function getCardsVisible(){
+  const w=window.innerWidth;
+  if(w>=1024)return 4;
+  if(w>=768)return 3;
+  if(w>=640)return 2;
+  return 1;
+}
+
+function scrollToGroup(idx){
+  const c=document.getElementById('carousel');
+  const cards=c.querySelectorAll('.product-card');
+  if(!cards.length)return;
+  const cardsVis=getCardsVisible();
+  const totalGroups=Math.ceil(PRODUCTS.length/cardsVis);
+  idx=((idx%totalGroups)+totalGroups)%totalGroups;
+  carouselPos=idx;
+  const targetCard=cards[Math.min(idx*cardsVis,cards.length-1)];
+  c.scrollTo({left:targetCard.offsetLeft-24,behavior:'smooth'});
+  updateDots();
+}
+
+function updateDots(){
+  const dots=document.querySelectorAll('.c-dot');
+  dots.forEach((d,i)=>{d.classList.toggle('active',i===carouselPos)});
+}
+
+function carouselNext(){
+  const cardsVis=getCardsVisible();
+  const totalGroups=Math.ceil(PRODUCTS.length/cardsVis);
+  scrollToGroup((carouselPos+1)%totalGroups);
+  restartCarouselAuto();
+}
+function carouselPrev(){
+  const cardsVis=getCardsVisible();
+  const totalGroups=Math.ceil(PRODUCTS.length/cardsVis);
+  scrollToGroup((carouselPos-1+totalGroups)%totalGroups);
+  restartCarouselAuto();
+}
+
+function startCarouselAuto(){
+  clearInterval(carouselAutoTimer);
+  carouselAutoTimer=setInterval(()=>{
+    const cardsVis=getCardsVisible();
+    const totalGroups=Math.ceil(PRODUCTS.length/cardsVis);
+    scrollToGroup((carouselPos+1)%totalGroups);
+  },4000);
+}
+function restartCarouselAuto(){clearInterval(carouselAutoTimer);startCarouselAuto()}
+
+// Touch swipe for carousel
+let touchStartX=0;
+function setupCarouselTouch(){
+  const c=document.getElementById('carousel');
+  c.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX},{passive:true});
+  c.addEventListener('touchend',e=>{
+    const diff=touchStartX-e.changedTouches[0].clientX;
+    if(Math.abs(diff)>50){diff>0?carouselNext():carouselPrev()}
+  },{passive:true});
+}
+
+// Update dots on manual scroll
+function setupScrollListener(){
+  const c=document.getElementById('carousel');
+  let scrollTimeout;
+  c.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimeout);
+    scrollTimeout=setTimeout(()=>{
+      const cards=c.querySelectorAll('.product-card');
+      if(!cards.length)return;
+      const cardsVis=getCardsVisible();
+      const scrollLeft=c.scrollLeft+24;
+      let closest=0,minDist=Infinity;
+      cards.forEach((card,i)=>{
+        const dist=Math.abs(card.offsetLeft-scrollLeft);
+        if(dist<minDist){minDist=dist;closest=i}
+      });
+      carouselPos=Math.floor(closest/cardsVis);
+      updateDots();
+    },100);
+  },{passive:true});
+}
+
+/* ═══════════ TICKER ═══════════ */
+function buildTicker(){const t=document.getElementById('tickerTrack');t.innerHTML=[...TICKER_ITEMS,...TICKER_ITEMS].map(i=>`<div class="ticker-item"><svg viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>${i}</div>`).join('')}
+
+/* ═══════════ INIT ═══════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  const wa=`https://wa.me/${WHATSAPP_NUMBER}`;document.getElementById('waBtn').href=wa;document.getElementById('ctaWa').href=wa;
+  buildCarousel();buildTicker();setupCarouselTouch();setupScrollListener();
+  animateCounter('stat1',0,500,1800);animateCounter('stat2',0,15,1200);
+  document.getElementById('chatInput').addEventListener('input',()=>{document.getElementById('sendBtn').disabled=!document.getElementById('chatInput').value.trim()||isWaiting});
+});
+
+/* ═══════════ CHAT FUNCTIONS — ALL PRESERVED EXACTLY ═══════════ */
+function toggleChat(){isOpen=!isOpen;const w=document.getElementById('chatWindow'),f=document.getElementById('chatFab');if(isOpen){w.classList.add('open');f.classList.add('active');document.getElementById('chatInput').focus()}else{w.classList.remove('open');f.classList.remove('active')}}
+function inquireAbout(n){if(!isOpen)toggleChat();setTimeout(()=>{const i=document.getElementById('chatInput');i.value=`I'm interested in ${n}, please tell me more.`;document.getElementById('sendBtn').disabled=false;i.focus()},400)}
+function handleKeyDown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function sendQuickMessage(t){document.getElementById('chatInput').value=t;sendMessage()}
+function sendMessage(){const input=document.getElementById('chatInput'),text=input.value.trim();if(!text||isWaiting)return;if(isFirstMessage){document.getElementById('welcomeScreen').style.display='none';document.getElementById('chatMessages').style.display='flex';isFirstMessage=false}addMessage(text,'user');input.value='';document.getElementById('sendBtn').disabled=true;showTyping();isWaiting=true;sendToWebhook(text)}
+
+function addMessage(text,type){
+  const c=document.getElementById('chatMessages'),now=new Date(),ts=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  let mt=text,opts=[];const om=text.match(/\[OPTIONS:\s*(.+?)\]/);
+  if(om&&type==='bot'){opts=om[1].split('|').map(o=>o.trim());mt=text.replace(/\[OPTIONS:\s*.+?\]/,'').trim()}
+  let md=null;const mm=mt.match(/\[MEETING_CONFIRMED\]([\s\S]*?)\[\/MEETING_CONFIRMED\]/);
+  if(mm){md={};['Name','Email','Phone','Date','Time','Product'].forEach(f=>{const m=mm[1].match(new RegExp(f+'\\s*:\\s*(.+?)(?:\\n|$)','i'));if(m)md[f.toLowerCase()]=m[1].trim()});mt=mt.replace(/\[MEETING_CONFIRMED\][\s\S]*?\[\/MEETING_CONFIRMED\]/,'').trim()}
+  mt=mt.replace(/\*\*(\d+)\.\*\*/g,'$1.');
+  const d=document.createElement('div');d.className=`message ${type}`;let h='';
+  if(type==='bot')h+=`<div class="msg-av"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>`;
+  h+=`<div class="msg-content"><div class="msg-bubble">${escapeHtml(mt)}</div>`;
+  if(md&&type==='bot'){h+=`<div class="meeting-card"><h4>✔ Meeting Confirmed!</h4>${md.name?`<div class="detail"><span>Name</span><strong>${escapeHtml(md.name)}</strong></div>`:''}${md.date?`<div class="detail"><span>Date</span><strong>${escapeHtml(md.date)}</strong></div>`:''}${md.time?`<div class="detail"><span>Time</span><strong>${escapeHtml(md.time)}</strong></div>`:''}${md.product?`<div class="detail"><span>Product</span><strong>${escapeHtml(md.product)}</strong></div>`:''}</div>`}
+  if(opts.length){h+='<div class="option-buttons">';opts.forEach((o,i)=>{h+=`<button class="option-btn" onclick="selectOption(this,'${escapeAttr(o)}')"><span class="opt-num">${i+1}</span><span>${escapeHtml(o)}</span></button>`});h+='</div>'}
+  h+=`<div class="msg-time">${ts}</div></div>`;d.innerHTML=h;c.appendChild(d);scrollB()
+}
+
+function addMeetingCardMessage(data){
+  const c=document.getElementById('chatMessages'),ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const n=data.Name||'',dt=data.Date||'',t=data.Time||'',p=data.Producat||data.Product||'',sp=data['Sales Persone']||data.salesPerson||'';
+  const d=document.createElement('div');d.className='message bot';
+  d.innerHTML=`<div class="msg-av"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div><div class="msg-content"><div class="msg-bubble">Meeting successfully booked!</div><div class="meeting-card"><h4>✔ Meeting Confirmed!</h4>${n?`<div class="detail"><span>Name</span><strong>${escapeHtml(n)}</strong></div>`:''}${dt?`<div class="detail"><span>Date</span><strong>${escapeHtml(dt)}</strong></div>`:''}${t?`<div class="detail"><span>Time</span><strong>${escapeHtml(t)}</strong></div>`:''}${p?`<div class="detail"><span>Product</span><strong>${escapeHtml(p)}</strong></div>`:''}${sp?`<div class="detail"><span>Contact</span><strong>${escapeHtml(sp)}</strong></div>`:''}</div><div class="msg-time">${ts}</div></div>`;
+  c.appendChild(d);scrollB()
+}
+
+function selectOption(b,t){b.closest('.option-buttons').querySelectorAll('.option-btn').forEach(x=>x.classList.add('disabled'));b.style.background='var(--blue)';b.style.color='#fff';b.style.opacity='1';b.querySelector('.opt-num').style.background='rgba(255,255,255,.2)';b.querySelector('.opt-num').style.color='#fff';document.getElementById('chatInput').value=t;sendMessage()}
+function showTyping(){const c=document.getElementById('chatMessages'),d=document.createElement('div');d.className='typing-indicator';d.id='typingIndicator';d.innerHTML=`<div class="msg-av"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;c.appendChild(d);scrollB()}
+function hideTyping(){const t=document.getElementById('typingIndicator');if(t)t.remove()}
+function scrollB(){const c=document.getElementById('chatMessages');setTimeout(()=>{c.scrollTop=c.scrollHeight},50)}
+function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML.replace(/\n/g,'<br>')}
+function escapeAttr(t){return t.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+
+function extractBotResponse(d){if(typeof d==='string')return d;if(Array.isArray(d)){for(const i of d){const r=extractBotResponse(i);if(r&&!isRJ(r))return r}return''}if(typeof d==='object'&&d!==null){if(d.output&&typeof d.output==='string')return d.output;if(d.text&&typeof d.text==='string')return d.text;if(d.response&&typeof d.response==='string')return d.response;if(d.message&&typeof d.message==='string')return d.message;if(d.data)return extractBotResponse(d.data);if(d.json)return extractBotResponse(d.json);const v=Object.values(d);for(const x of v){if(typeof x==='string'&&x.length>2&&!isRJ(x))return x}for(const x of v){const r=extractBotResponse(x);if(r&&!isRJ(r))return r}}return''}
+function isRJ(s){if(typeof s!=='string')return false;const t=s.trim();return(t[0]==='{'&&t.slice(-1)==='}')||(t[0]==='['&&t.slice(-1)===']')}
+function extractMeetingData(d){if(typeof d==='object'&&d!==null){if(d.Name||d['Sales Persone'])return d;for(const v of Object.values(d)){const r=extractMeetingData(v);if(r)return r}}if(Array.isArray(d)){for(const i of d){const r=extractMeetingData(i);if(r)return r}}return null}
+
+async function sendToWebhook(msg){
+  try{const r=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chatInput:msg,sessionId,action:'sendMessage'})});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();hideTyping();const md=extractMeetingData(d);if(md&&md.Name)addMeetingCardMessage(md);else{const br=extractBotResponse(d);if(br)addMessage(br,'bot');else addMessage("Couldn't parse response. Please try again.",'bot')}}
+  catch(e){hideTyping();addMessage('Connection error. Please check internet and try again.','bot')}
+  finally{isWaiting=false;document.getElementById('sendBtn').disabled=!document.getElementById('chatInput').value.trim()}
+}
+</script>
+</body>
+</html>
