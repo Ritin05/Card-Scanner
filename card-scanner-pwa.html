@@ -1052,6 +1052,7 @@
         <div class="fg">
             <span class="flabel"><span data-en="Sales Person" data-hi="&#2360;&#2375;&#2354;&#2381;&#2360; &#2346;&#2352;&#2381;&#2360;&#2344;">Sales Person</span> <span class="freq">*</span></span>
             <input type="text" id="sp" readonly style="cursor:default;opacity:0.8" placeholder="Login required">
+            <select id="sp-select" style="display:none"><option value="">-- Select Sales Person --</option></select>
         </div>
         <div class="fg">
             <span class="flabel"><span data-en="Priority" data-hi="&#2346;&#2381;&#2352;&#2366;&#2341;&#2350;&#2367;&#2325;&#2340;&#2366;">Priority</span> <span class="freq">*</span></span>
@@ -1300,7 +1301,7 @@ let activeFilter='all',batchSel=new Set(),lang='en',currentSort='date-desc';
 let currentUser=null;
 
 // ============ USERS ============
-// role: 'admin' can see Export & all data, 'sales' is normal sales person
+// role: 'admin' can see Export & all data, 'sales' is normal sales person, 'manager' sees sales person dropdown
 const USERS=[
     {email:'sales2@supersonicgroup.in',password:'dharmesh@ss',name:'Dharmesh Dobariya',role:'sales'},
     {email:'sales7@supersonicgroup.in',password:'tejash@ss',name:'Tejash Bhajiwala',role:'sales'},
@@ -1311,6 +1312,8 @@ const USERS=[
     {email:'mis2@supersonicgroup.in',password:'mis2@ss2026',name:'MIS 2',role:'admin'},
     {email:'md@supersonicgroup.in',password:'md@ss2026',name:'MD',role:'admin'},
     {email:'info@supersonicgroup.in',password:'info@ss2026',name:'Info',role:'admin'},
+    {email:'marketing1@supersonicgroup.in',password:'Super@123',name:'Marketing',role:'manager'},
+    {email:'videoeditorsupersonicgroup@gmail.com',password:'Super@123',name:'Video Editor',role:'manager'},
 ];
 
 // ============ LOGIN / SIGNUP ============
@@ -1387,10 +1390,27 @@ function showLogin(){
     document.getElementById('loginBox').style.display='';
     document.getElementById('signupErr').textContent='';
 }
+function getSalesPerson(){
+    return currentUser&&currentUser.role==='manager'
+        ?document.getElementById('sp-select').value
+        :document.getElementById('sp').value;
+}
 function applyLogin(){
     document.getElementById('loginScreen').classList.add('hidden');
     document.body.classList.remove('not-logged-in');
-    document.getElementById('sp').value=currentUser.name;
+    const isManager=currentUser.role==='manager';
+    const spInput=document.getElementById('sp');
+    const spSelect=document.getElementById('sp-select');
+    if(isManager){
+        spInput.style.display='none';
+        spSelect.style.display='';
+        const salesNames=USERS.filter(u=>u.role==='sales').map(u=>`<option value="${u.name}">${u.name}</option>`).join('');
+        spSelect.innerHTML='<option value="">-- Select Sales Person --</option>'+salesNames;
+    }else{
+        spInput.style.display='';
+        spSelect.style.display='none';
+        spInput.value=currentUser.name;
+    }
     document.getElementById('headerUser').textContent=currentUser.name;
     // Hide export for non-admin
     const exportBtn=document.getElementById('exportBtn');
@@ -1522,7 +1542,7 @@ function onEventChange(){
 async function submitCard(){
     if(!frontImgs.length)return toast('Add card photo','&#128247;');
     if(!currentUser)return toast('Please login first','&#128100;');
-    if(!document.getElementById('sp').value)return toast('Sales person not set','&#128100;');
+    if(!getSalesPerson())return toast('Sales person not set','&#128100;');
     if(!document.getElementById('pr').value)return toast('Select priority','&#9888;');
     // Get event name — handle "Other"
     let evVal=document.getElementById('ev').value;
@@ -1538,7 +1558,7 @@ async function submitCard(){
         const cf=[];for(const m of frontImgs)cf.push(await compress(m.url));
         const cb=[];for(const m of backImgs)cb.push(await compress(m.url));
         let ab=null;if(audioBlob)ab=await blob2b64(audioBlob);
-        const data={frontImages:cf,backImages:cb,voiceNote:ab,salesPerson:document.getElementById('sp').value,remark:document.getElementById('pr').value,eventName:evVal,sendNotification:sendNotif,quickNotes:document.getElementById('qn').value,timestamp:new Date().toISOString(),status:'pending'};
+        const data={frontImages:cf,backImages:cb,voiceNote:ab,salesPerson:getSalesPerson(),remark:document.getElementById('pr').value,eventName:evVal,sendNotification:sendNotif,quickNotes:document.getElementById('qn').value,timestamp:new Date().toISOString(),status:'pending'};
         await dbAdd('cards',data);toast('Card saved!','&#9989;');resetForm();refreshStats();renderQueue();renderHist();
         if(navigator.onLine)setTimeout(()=>syncAll(),1000);
     }catch(e){console.error(e);toast('Error saving','&#9888;')}
@@ -1557,8 +1577,11 @@ function resetForm(){
     document.getElementById('evOtherWrap').style.display='none';
     document.getElementById('sendNotif').checked=true;
     document.getElementById('notifHint').textContent='Customer ko thank you message jayega';
-    // Keep sales person name from login
-    if(currentUser)document.getElementById('sp').value=currentUser.name;
+    // Keep sales person for sales/admin; reset dropdown for manager
+    if(currentUser){
+        if(currentUser.role==='manager'){document.getElementById('sp-select').value='';}
+        else{document.getElementById('sp').value=currentUser.name;}
+    }
 }
 
 // ============ SYNC ============
