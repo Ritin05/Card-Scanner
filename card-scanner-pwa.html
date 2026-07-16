@@ -593,8 +593,9 @@
 
         /* ===== TOAST ===== */
         .toast{
-            position:fixed;top:80px;left:50%;
-            transform:translateX(-50%) translateY(-80px);
+            position:fixed;top:76px;left:50%;
+            transform:translateX(-50%) translateY(-120px);
+            opacity:0;pointer-events:none;
             background:#1e293b;color:#ffffff;
             padding:12px 24px;border-radius:var(--r2);
             font-size:13px;font-weight:500;z-index:300;
@@ -602,7 +603,7 @@
             transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
             white-space:nowrap;display:flex;align-items:center;gap:8px;
         }
-        .toast.show{transform:translateX(-50%) translateY(0);top:80px}
+        .toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
 
         /* ===== BOTTOM NAV ===== */
         .bnav{
