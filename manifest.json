@@ -1,6 +1,6 @@
 {
-  "name": "Super Sonic Card Scanner",
-  "short_name": "CardScan",
+  "name": "Super Scanner",
+  "short_name": "Super Scanner",
   "description": "Business card scanning and lead management for Super Sonic Group",
   "start_url": "/",
   "display": "standalone",
