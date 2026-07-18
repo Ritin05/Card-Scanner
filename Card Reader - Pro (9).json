@@ -960,11 +960,6 @@
             "node": "Prepare WhatsApp Check Data",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Send Email",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -1019,6 +1014,11 @@
           },
           {
             "node": "Send WhatsApp to Mobile Number",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Email",
             "type": "main",
             "index": 0
           }
